@@ -1,6 +1,5 @@
 package com.bcn.service;
 
-import java.sql.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,7 +7,6 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -92,7 +90,6 @@ public class ClientesDaoServiceImplement implements ClientesDaoService {
 			if ((rs = ps.executeQuery()).next()) {
 				cliente = new Clientes();
 
-				cliente = new Clientes();
 				cliente.setClienteId(rs.getInt("cliente_id"));
 				cliente.setNombre(rs.getString("nombre"));
 				cliente.setApellidoPaterno(rs.getString("apellido_paterno"));
