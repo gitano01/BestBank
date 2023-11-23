@@ -1,0 +1,225 @@
+package com.bcn.service;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.bcn.model.Sucursales;
+import com.bcn.utils.DbConnect;
+
+@Service
+public class SucursalesDaoServiceImplement implements SucursalesDaoService {
+	@Autowired
+	private DbConnect con;
+	Connection conn = null;
+	PreparedStatement ps = null;
+	ResultSet rs = null;
+
+	@Override
+	public List<List<?>> getDatos() throws Exception, SQLException {
+		List<List<?>> datos = new ArrayList<List<?>>();
+		List<Sucursales> sucursales = getSucursales();
+		try {
+			datos.add(sucursales);
+		} catch (Exception e) {
+			datos = null;
+		}
+
+		return datos;
+	}
+
+	@Override
+	public List<Sucursales> getSucursales() throws Exception, SQLException {
+		List<Sucursales> listaSucursales = new ArrayList<Sucursales>();
+		Sucursales sucursal = null;
+		try {
+			conn = con.getConnection();
+			ps = conn.prepareStatement("select * from sucursal;");
+
+			if ((rs = ps.executeQuery()).next()) {
+				do {
+					sucursal = new Sucursales();
+
+					sucursal.setSucursalId(rs.getInt("sucursal_id"));
+					sucursal.setNombreSucursal(rs.getString("nombre"));
+					sucursal.setNumeroSucursal(rs.getString("numero_sucursal"));
+					sucursal.setTelefono(rs.getString("telefono"));
+					sucursal.setCiudad(rs.getString("ciudad"));
+					sucursal.setDireccion(rs.getString("direccion"));
+					sucursal.setEstado(rs.getString("estado"));
+					sucursal.setFechaApertura(rs.getTimestamp("fecha_apertura"));
+					sucursal.setFechaCierre(rs.getTimestamp("fecha_cierre"));
+
+					listaSucursales.add(sucursal);
+				} while (rs.next());
+			} else {
+				System.out.println("No existen registros");
+				listaSucursales = null;
+			}
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		} finally {
+			con.closeConnection(conn, ps, rs);
+		}
+
+		return listaSucursales;
+	}
+
+	@Override
+	public Sucursales getSucursal(int id) throws Exception, SQLException {
+		Sucursales sucursal = null;
+		try {
+			conn = con.getConnection();
+			ps = conn.prepareStatement("select * from sucursal where sucursal_id = ?;");
+			ps.setInt(1, id);
+
+			if ((rs = ps.executeQuery()).next()) {
+				sucursal = new Sucursales();
+
+				sucursal.setSucursalId(rs.getInt("sucursal_id"));
+				sucursal.setNombreSucursal(rs.getString("nombre"));
+				sucursal.setNumeroSucursal(rs.getString("numero_sucursal"));
+				sucursal.setTelefono(rs.getString("telefono"));
+				sucursal.setCiudad(rs.getString("ciudad"));
+				sucursal.setDireccion(rs.getString("direccion"));
+				sucursal.setEstado(rs.getString("estado"));
+				sucursal.setFechaApertura(rs.getTimestamp("fecha_apertura"));
+				sucursal.setFechaCierre(rs.getTimestamp("fecha_cierre"));
+
+			} else {
+				System.out.println("No existen registros");
+				sucursal = null;
+			}
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		} finally {
+			con.closeConnection(conn, ps, rs);
+		}
+		return sucursal;
+	}
+
+	@Override
+	public String crearSucursal(Sucursales sucursal) throws Exception, SQLException {
+		String response = "";
+
+		try {
+			conn = con.getConnection();
+			Long datetime = System.currentTimeMillis();
+			Timestamp tp = new Timestamp(datetime);
+			String sql = "insert into sucursal (nombre, numero_sucursal, direccion, telefono, ciudad, estado, fecha_apertura)"
+					+ "values(?,?,?,?,?,?,?)";
+			ps = conn.prepareStatement(sql);
+
+			ps.setString(1, sucursal.getNombreSucursal());
+			ps.setString(2, sucursal.getNumeroSucursal());
+			ps.setString(3, sucursal.getDireccion());
+			ps.setString(4, sucursal.getTelefono());
+			ps.setString(5, sucursal.getCiudad());
+			ps.setString(6, sucursal.getEstado());
+			ps.setTimestamp(7, tp);
+
+			if (ps.executeUpdate() == 1) {
+				System.out.println("Sucursal agregada");
+				response = "OK";
+			} else {
+				System.out.println("Error al agregar la sucursal");
+				response = "No se pudo agregar la sucursal";
+			}
+		} catch (Exception e) {
+
+		} finally {
+			con.closeConnection(conn, ps);
+		}
+
+		return response;
+	}
+
+	@Override
+	public String updateSucursal(Sucursales sucursal, int id) throws Exception, SQLException {
+		String response = "";
+
+		try {
+			conn = con.getConnection();
+			String sql = "update sucursal set nombre= ?, numero_sucursal = ?, telefono = ?, direccion = ?, ciudad = ?, estado = ? where sucursal_id = "
+					+ id + ";";
+			ps = conn.prepareStatement(sql);
+
+			ps.setString(1, sucursal.getNombreSucursal());
+			ps.setString(2, sucursal.getNumeroSucursal());
+			ps.setString(3, sucursal.getTelefono());
+			ps.setString(4, sucursal.getDireccion());
+			ps.setString(5, sucursal.getCiudad());
+			ps.setString(6, sucursal.getEstado());
+
+			if (ps.executeUpdate() == 1) {
+				System.out.println("Sucursal actualizada");
+				response = "OK";
+			} else {
+				System.out.println("No se encontró información de la sucursal");
+				response = "No se encontró información de la sucursal";
+			}
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		} finally {
+			con.closeConnection(conn, ps);
+		}
+		return response;
+	}
+
+	@Override
+	public String dropSucursal(int id) throws Exception, SQLException {
+		String response = "";
+		try {
+			long datetime = System.currentTimeMillis();
+			Timestamp tp = new Timestamp(datetime);
+			conn = con.getConnection();
+			String sql = "update sucursal set fecha_cierre = ? where sucursal_id = " + id + ";";
+			ps = conn.prepareStatement(sql);
+
+			ps.setTimestamp(1, tp);
+
+			if (ps.executeUpdate() == 1) {
+				System.out.println("Sucursal dada de baja");
+				response = "OK";
+			} else {
+				System.out.println("No se encontró información de la sucursal");
+				response = "No se encontró información de la sucursal";
+			}
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		} finally {
+			con.closeConnection(conn, ps);
+		}
+		return response;
+	}
+
+	@Override
+	public String deleteSucursal(int id) throws Exception, SQLException {
+		String response = "";
+		try {
+			conn = con.getConnection();
+			String sql = "delete from sucursal where sucursal_id = " + id + ";";
+			ps = conn.prepareStatement(sql);
+
+			if (ps.executeUpdate() == 1) {
+				System.out.println("Sucursal eliminada");
+				response = "OK";
+			} else {
+				System.out.println("No se encontró información de la sucursal");
+				response = "No se encontró información de la sucursal";
+			}
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		} finally {
+			con.closeConnection(conn, ps);
+		}
+		return response;
+	}
+}
