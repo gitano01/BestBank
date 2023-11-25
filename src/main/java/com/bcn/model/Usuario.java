@@ -11,9 +11,9 @@ public class Usuario {
     private int rol_id;
     private int permiso_id;
     private int empleado_id;
-    private Timestamp fecha_alta;
-    private Timestamp fecha_baja;
-    private Timestamp fecha_modificacion;    
+    private String fecha_alta;
+    private String fecha_baja;
+    private String fecha_modificacion;    
     private int cliente_id;
     
     public void setUsuario_id(int usuario_id) {
@@ -37,13 +37,13 @@ public class Usuario {
     public void setPermiso_id(int permiso_id) {
         this.permiso_id = permiso_id;
     }
-    public void setFecha_alta(Timestamp fecha_alta) {
+    public void setFecha_alta(String fecha_alta) {
         this.fecha_alta = fecha_alta;
     }
-    public void setFecha_baja(Timestamp fecha_baja) {
+    public void setFecha_baja(String fecha_baja) {
         this.fecha_baja = fecha_baja;
     }
-    public void setFecha_modificacion(Timestamp fecha_modificacion) {
+    public void setFecha_modificacion(String fecha_modificacion) {
         this.fecha_modificacion = fecha_modificacion;
     }
     public void setEmpleado_id(int empleado_id) {
@@ -73,13 +73,13 @@ public class Usuario {
     public int getPermiso_id() {
         return permiso_id;
     }
-    public Timestamp getFecha_alta() {
+    public String getFecha_alta() {
         return fecha_alta;
     }
-    public Timestamp getFecha_baja() {
+    public String getFecha_baja() {
         return fecha_baja;
     }
-    public Timestamp getFecha_modificacion() {
+    public String getFecha_modificacion() {
         return fecha_modificacion;
     }
     public int getEmpleado_id() {

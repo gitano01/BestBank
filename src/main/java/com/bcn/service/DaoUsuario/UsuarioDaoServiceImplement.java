@@ -3,7 +3,6 @@ package com.bcn.service.DaoUsuario;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,50 +11,117 @@ import org.springframework.stereotype.Service;
 
 import com.bcn.model.Usuario;
 import com.bcn.utils.DbConnect;
+import com.bcn.utils.UtilsGeneric;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 @Service
 public class UsuarioDaoServiceImplement implements UsuarioDaoService {
     //Inyeccion de dependecia 
     @Autowired
     private DbConnect db;
+
+    @Autowired
+    private UtilsGeneric utils;
     
     Connection conn;
     PreparedStatement ps;
     ResultSet rs;
-    public List<Usuario> getDatos() throws Exception, SQLException{
-        //obtener los usuarios de la base de datos
+
+    public List<Usuario> getDatos() throws Exception{
         List<Usuario> list = null;
+        //obtener los usuarios de la base de datos        
+        JsonArray jArray  = null;
         try{
-        conn = db.getConnection();
-        ps = conn.prepareStatement("Select * from usuarios");
-        System.out.println(ps.toString());
-        rs =ps.executeQuery();
-           list = new ArrayList<>();
-            while(rs.next()){
-                //System.out.println("****** el objetito" + new Gson().toJson(rs.toString()) +"* ******");
-                
-                Usuario usr = new Usuario();
-                usr.setUsuario_id(rs.getInt("usuario_id"));
-                usr.setUsuario(rs.getString("usuario"));
-                usr.setContrasenia(rs.getString("contrasenia"));
-                usr.setEmail(rs.getString("email"));
-                usr.setActivo(rs.getBoolean("activo"));
-                usr.setRol_id(rs.getInt("rol_id"));
-                usr.setPermiso_id(rs.getInt("permiso_id"));
-                usr.setEmpleado_id(rs.getInt("empleado_id"));
-                usr.setFecha_alta(rs.getTimestamp("fecha_alta"));
-                usr.setFecha_baja(rs.getTimestamp("fecha_baja"));
-                usr.setFecha_modificacion(rs.getTimestamp("fecha_modificacion"));
-                usr.setCliente_id(rs.getInt("cliente_id"));
-                list.add(usr);
-            }            
-            
-        }catch(Exception e){
-            e.printStackTrace();
+            conn = db.getConnection();
+            ps = conn.prepareStatement("select * from usuarios;");
+            if((rs =ps.executeQuery()).next()){
+                jArray = new JsonArray();
+                do{
+                    JsonObject obj = utils.getJsonObject(rs);
+                    jArray.add(obj);
+                }while(rs.next());
+            }           
+            }catch(Exception e){
+            throw  new Exception(e.getMessage());
         }finally{
             db.closeConnection(conn, ps, rs);
         }
+        //validar el contenido del Json Array
+        if(jArray.size()>0){
+            list = new ArrayList<>();
+            for(JsonElement o : jArray){
+                Usuario usr = new  Gson().fromJson(o.getAsJsonObject().toString(), Usuario.class);
+                list.add(usr);
+            }      
+        }
         return list;
     }
+
+    @Override
+    public Usuario getUsuario(int id) throws Exception{
+        JsonObject jObject = null;
+        Usuario usr = null;
+        try{
+            conn = db.getConnection();
+            ps = conn.prepareStatement("select * from usuarios where usuario_id= ?;");
+            ps.setInt(1, id);
+            if((rs =ps.executeQuery()).next()){
+                jObject = new JsonObject();
+                do{
+                    jObject = utils.getJsonObject(rs);
+                    
+                }while(rs.next());
+            }   
+        }catch(Exception e){
+            throw new Exception(e.getMessage());
+        }finally{
+            db.closeConnection(conn,ps,rs);
+        }
+        //validar el contenido del JsonObject
+        if(jObject != null){
+            usr = new  Gson().fromJson(jObject.getAsJsonObject().toString(), Usuario.class);
+        }
+        // TODO Auto-generated method stub
+        return usr;
+    }
+
+    @Override
+    public String postUsuario(Usuario usuario) throws Exception {
+        String response = "";
+        try{
+            conn = db.getConnection();
+            ps = conn.prepareStatement("Insert into usuarios(usuario,contrasenia,email,activo,"+
+            "rol_id,permiso_id,empleado_id,fecha_alta,cliente_id)"
+            +" values (?,?,?,?,?,?,?,?,?)");
+            ps.setString(1, usuario.getUsuario());
+            ps.setString(2, utils.getMd5(usuario.getContrasenia()));
+            ps.setString(3, usuario.getEmail());
+            ps.setBoolean(4, false);
+            ps.setInt(5, usuario.getRol_id());
+            ps.setInt(6, usuario.getPermiso_id());
+            ps.setInt(7, usuario.getEmpleado_id());
+            ps.setTimestamp(8, utils.getFechaHoy());
+            ps.setInt(9, usuario.getCliente_id());
+            if (ps.executeUpdate() == 1) {
+				System.out.println("Usuario agregado");
+				response = "OK";
+			} else {
+				System.out.println("Error al agregar usuario");
+				response = "No se pudo agregar al usuario";
+			}
+
+        }catch(Exception e){
+            throw new Exception(e.getMessage());
+        }finally{
+            db.closeConnection(conn, ps, rs);
+        }
+        // TODO Auto-generated method stub
+        return response;
+    }
+
+    
+    
 }

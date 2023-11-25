@@ -6,5 +6,7 @@ import java.util.List;
 import com.bcn.model.Usuario;
 
 public interface UsuarioDaoService {
-    public List<Usuario> getDatos() throws Exception, SQLException;
+    public List<Usuario> getDatos() throws Exception;
+    public Usuario getUsuario(int id) throws Exception;
+    public String postUsuario(Usuario usuario)throws Exception;
 }
