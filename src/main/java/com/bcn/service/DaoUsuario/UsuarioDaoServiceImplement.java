@@ -36,7 +36,7 @@ public class UsuarioDaoServiceImplement implements UsuarioDaoService {
         JsonArray jArray  = null;
         try{
             conn = db.getConnection();
-            ps = conn.prepareStatement("select * from usuarios;");
+            ps = conn.prepareStatement("select * from usuarios order by usuario_id asc");
             if((rs =ps.executeQuery()).next()){
                 jArray = new JsonArray();
                 do{
@@ -88,7 +88,7 @@ public class UsuarioDaoServiceImplement implements UsuarioDaoService {
         return usr;
     }
 
-    @Override
+    
     public String postUsuario(Usuario usuario) throws Exception {
         String response = "";
         try{
@@ -123,5 +123,77 @@ public class UsuarioDaoServiceImplement implements UsuarioDaoService {
     }
 
     
+    public String deactiveUsuario(int id) throws Exception {
+        // TODO Auto-generated method stub
+        String response="";
+        try{
+        conn = db.getConnection();
+        ps = conn.prepareStatement("update usuarios set activo=false where usuario_id= ? and fecha_modificacion = ?");        
+        ps.setInt(1, id);
+        ps.setTimestamp(2, utils.getFechaHoy());
+        if (ps.executeUpdate() == 0) {
+				System.out.println("Usuario dado de baja temporal");
+				response = "OK";
+			} else {
+				System.out.println("Error al dar de baja a usuario");
+				response = "No se pudo dar de baja a usuario";
+			}
+        }catch(Exception e){
+            throw new Exception(e.getMessage());
+        }finally{
+            db.closeConnection(conn, ps, rs);
+        }
+        return response;
+    }
+
+    public String activeUsuario(int id) throws Exception {
+        // TODO Auto-generated method stub
+        String response="";
+        try{
+        conn = db.getConnection();
+        ps = conn.prepareStatement("update usuarios set activo=true where usuario_id= ? and fecha_modificacion = ?");        
+        ps.setInt(1, id);
+        ps.setTimestamp(2, utils.getFechaHoy());        
+        if (ps.executeUpdate() == 0) {
+				System.out.println("Usuario activado");
+				response = "OK";
+			} else {
+				System.out.println("Error al dar de baja a usuario");
+				response = "No se pudo activar al usuario";
+			}
+        }catch(Exception e){
+            throw new Exception(e.getMessage());
+        }finally{
+            db.closeConnection(conn, ps, rs);
+        }
+        return response;
+    }
+
+    public String putUsuario(Usuario usuario,int id) throws Exception{
+    String  response="";
+        try{
+            conn = db.getConnection();
+            ps = conn.prepareStatement("update usuarios set usuario=?,email=?,"+
+            "rol_id=?,permiso_id=?,fecha_modificacion=? where usuario_id=?");            
+            ps.setString(1, usuario.getUsuario());
+            ps.setString(2, usuario.getEmail());           
+            ps.setInt(3, usuario.getRol_id());
+            ps.setInt(4, usuario.getPermiso_id());           
+            ps.setTimestamp(5, utils.getFechaHoy()); 
+            ps.setInt(6, id);           
+            if (ps.executeUpdate() == 1) {
+				System.out.println("Usuario actualizado");
+				response = "OK";
+			} else {
+				System.out.println("Error al actualizar usuario");
+				response = "No se pudo actualizar al usuario";
+			}
+        }catch(Exception e){
+            throw new Exception(e.getMessage());
+        }finally{
+            db.closeConnection(conn, ps, rs);
+        }
+        return response;
+    }    
     
 }

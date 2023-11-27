@@ -9,13 +9,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bcn.model.Usuario;
 import com.bcn.service.DaoUsuario.UsuarioDaoServiceImplement;
-import com.google.gson.JsonArray;
+
 
 @RestController
 @RequestMapping("/usuarios")
@@ -65,6 +66,51 @@ public class UsuariosController {
       mensaje = userService.postUsuario(usr);
       if (mensaje.equals("OK"))
         return new ResponseEntity<String>("Usuario creado", HttpStatus.OK);
+      else
+        return new ResponseEntity<String>(mensaje, HttpStatus.BAD_REQUEST);
+    } catch (Exception e) {
+      throw new Exception(e.getMessage());
+    }
+  }
+
+  //Actualizacion de usuario
+   @PutMapping("/updateUsuario/{id}")
+  public ResponseEntity<?> putUsuario(@RequestBody Usuario usr, @PathVariable String id) throws Exception {
+    String mensaje = "";
+    try {
+      mensaje = userService.putUsuario(usr, Integer.parseInt(id));
+      if (mensaje.equals("OK"))
+        return new ResponseEntity<String>("Usuario actualizado", HttpStatus.OK);
+      else
+        return new ResponseEntity<String>(mensaje, HttpStatus.BAD_REQUEST);
+    } catch (Exception e) {
+      throw new Exception(e.getMessage());
+    }
+  }
+
+   //Desactivar usuario
+   @PutMapping("/deactiveUsuario/{id}")
+  public ResponseEntity<?> deactiveUsuario(@PathVariable String id) throws Exception {
+    String mensaje = "";
+    try {
+      mensaje = userService.deactiveUsuario(Integer.parseInt(id));
+      if (mensaje.equals("OK"))
+        return new ResponseEntity<String>("Baja de usuario realizada", HttpStatus.OK);
+      else
+        return new ResponseEntity<String>(mensaje, HttpStatus.BAD_REQUEST);
+    } catch (Exception e) {
+      throw new Exception(e.getMessage());
+    }
+  }
+  //
+  //Activar usuario
+   @PutMapping("/activeUsuario/{id}")
+  public ResponseEntity<?> activeUsuario(@PathVariable String id) throws Exception {
+    String mensaje = "";
+    try {
+      mensaje = userService.activeUsuario(Integer.parseInt(id));
+      if (mensaje.equals("OK"))
+        return new ResponseEntity<String>("Activacion de usuario realizada", HttpStatus.OK);
       else
         return new ResponseEntity<String>(mensaje, HttpStatus.BAD_REQUEST);
     } catch (Exception e) {
