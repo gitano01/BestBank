@@ -194,6 +194,39 @@ public class UsuarioDaoServiceImplement implements UsuarioDaoService {
             db.closeConnection(conn, ps, rs);
         }
         return response;
+    }
+
+    @Override
+    public Usuario loginUsuario(Usuario usuario) throws Exception {
+        JsonObject jObject = null;
+        Usuario usr = null;
+        try{
+            conn = db.getConnection();
+            ps = conn.prepareStatement("select * from usuarios where usuario= ? and contrasenia= ?");
+            ps.setString(1, usuario.getUsuario());
+            ps.setString(2, utils.getMd5(usuario.getContrasenia()));
+            if((rs =ps.executeQuery()).next()){
+                jObject = new JsonObject();
+                do{
+                    jObject = utils.getJsonObject(rs);
+                    
+                }while(rs.next());
+            }   
+        }catch(Exception e){
+            throw new Exception(e.getMessage());
+        }finally{
+            db.closeConnection(conn,ps,rs);
+        }
+        //validar el contenido del JsonObject
+        if(jObject != null){
+            usr = new  Gson().fromJson(jObject.getAsJsonObject().toString(), Usuario.class);
+            usr.setContrasenia(null);
+        }
+        // TODO Auto-generated method stub
+        return usr;
     }    
     
+    
+
+
 }

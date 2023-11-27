@@ -117,4 +117,21 @@ public class UsuariosController {
       throw new Exception(e.getMessage());
     }
   }
+
+  // Obtener el usuario por Id
+  @PostMapping("/login")
+  public ResponseEntity<?> loginUsuario(@RequestBody Usuario usuario) throws Exception {
+    Usuario usr;
+    try {
+      usr = userService.loginUsuario(usuario);
+    } catch (Exception e) {
+      throw new Exception(e.getMessage());
+    }
+    if (usr != null) {
+      return new ResponseEntity<Usuario>(usr, HttpStatus.OK);
+    } else {
+      return new ResponseEntity<String>("No existen usuarios registrados", HttpStatus.NOT_FOUND);
+    }
+  }
+
 }

@@ -11,4 +11,5 @@ public interface UsuarioDaoService {
     public String putUsuario(Usuario usuario,int id) throws Exception;
     public String deactiveUsuario(int id) throws Exception;
     public String activeUsuario(int id) throws Exception;
+    public Usuario loginUsuario(Usuario usuario) throws Exception;
 }
