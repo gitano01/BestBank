@@ -1,7 +1,5 @@
 package com.bcn.model;
 
-import java.sql.Timestamp;
-
 public class Usuario {
     private int usuario_id;
     private String usuario;
@@ -91,7 +89,6 @@ public class Usuario {
 
     @Override
     public String toString() {
-        // TODO Auto-generated method stub
         return super.toString();
     }    
 
