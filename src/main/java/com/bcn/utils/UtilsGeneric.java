@@ -48,7 +48,7 @@ public class UtilsGeneric {
 		}
 	}
 
-	public static String getMd5(String input) //funcion para generar contraseña md5
+	public String getMd5(String input) //funcion para generar contraseña md5
     {
         try { 
             // Static getInstance method is called with hashing MD5
@@ -75,7 +75,7 @@ public class UtilsGeneric {
         }
     }
 	
-	public static Timestamp getFechaHoy(){//obtiene la fecha del día
+	public Timestamp getFechaHoy(){//obtiene la fecha del día
 		Long datetime = System.currentTimeMillis();
 		return new Timestamp(datetime);
 	}
