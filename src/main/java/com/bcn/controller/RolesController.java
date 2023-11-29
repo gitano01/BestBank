@@ -22,7 +22,7 @@ public class RolesController {
     
     @Autowired
     private RolDaoServiceImplement rolService;
-
+    String response ="";
 
     @GetMapping("/getRol/{id}")//obtiene el Rol
     public ResponseEntity<?> getRol(@PathVariable String id) throws Exception{
@@ -42,10 +42,11 @@ public class RolesController {
     public ResponseEntity<?> getRol() throws Exception{
         try{
             List<Rol> lista = rolService.getRoles();
-            if(rol != null){
+
+            if(lista != null){
                 return new ResponseEntity<List<Rol>>(lista,HttpStatus.OK);
             }else{
-                return new ResponseEntity<String>("No existe el rol a buscar",HttpStatus.NOT_FOUND);
+                return new ResponseEntity<String>("No existen registros de roles",HttpStatus.NOT_FOUND);
             }
         }catch(Exception e){
             throw new Exception(e.getMessage());
@@ -53,44 +54,53 @@ public class RolesController {
     }
 
     @PostMapping("/addRol")//obtiene el Rol
-    public ResponseEntity<?> getRol(@RequestBody Rol rol) throws Exception{
+    public ResponseEntity<?> postRol(@RequestBody Rol rol) throws Exception{            
         try{
-            
+            response = rolService.postRol(rol);
+            if(response.equals("OK") ){
+                return new ResponseEntity<String>("Rol creado", HttpStatus.OK);
+            }else{
+                return new ResponseEntity<String>(response, HttpStatus.BAD_REQUEST);
+            }    
         }catch(Exception e){
             throw new Exception(e.getMessage());
         }
-        return null;
     }
 
     @PutMapping("/updateRol/{id}")//obtiene el Rol
-    public ResponseEntity<?> updateRol(@RequestBody Rol rol, int id) throws Exception{
+    public ResponseEntity<?> updateRol(@RequestBody Rol rol, @PathVariable String id) throws Exception{        
         try{
-            
+            response = rolService.putRol(rol, Integer.parseInt(id));
+            if(response.equals("OK") ){
+                return new ResponseEntity<String>("Rol actualizado", HttpStatus.OK);
+            }else{
+                return new ResponseEntity<String>(response, HttpStatus.BAD_REQUEST);
+            }            
         }catch(Exception e){
             throw new Exception(e.getMessage());
-        }
-        return null;
+        }        
     }
 
-    @PutMapping("/updateRol/deactivate/{id}")//obtiene el Rol
-    public ResponseEntity<?> deactivaeRol(@RequestBody Rol rol, int id) throws Exception{
-        try{
+    //se deja esta parte del codigopro si se tiene en mente agregar un campo de status a la tabla rol
+    // @PutMapping("/updateRol/deactivate/{id}")//obtiene el Rol
+    // public ResponseEntity<?> deactivaeRol(@RequestBody Rol rol, int id) throws Exception{
+    //     try{
             
-        }catch(Exception e){
-            throw new Exception(e.getMessage());
-        }
-        return null;
-    }
+    //     }catch(Exception e){
+    //         throw new Exception(e.getMessage());
+    //     }
+    //     return null;
+    // }
 
-    @PutMapping("/updateRol/activate/{id}")//obtiene el Rol
-    public ResponseEntity<?> activaeRol(@RequestBody Rol rol, int id) throws Exception{
-        try{
+    // @PutMapping("/updateRol/activate/{id}")//obtiene el Rol
+    // public ResponseEntity<?> activaeRol(@RequestBody Rol rol, int id) throws Exception{
+    //     try{
             
-        }catch(Exception e){
-            throw new Exception(e.getMessage());
-        }
-        return null;
-    }
+    //     }catch(Exception e){
+    //         throw new Exception(e.getMessage());
+    //     }
+    //     return null;
+    // }
     
 
 }
