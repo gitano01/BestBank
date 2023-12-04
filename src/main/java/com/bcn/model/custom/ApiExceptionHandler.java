@@ -16,7 +16,7 @@ public class ApiExceptionHandler {
     @ExceptionHandler({NoHandlerFoundException.class})
     public ResponseEntity<ApiErrorResponse> handleNoHandlerFoundException(
             NoHandlerFoundException ex, HttpServletRequest httpServletRequest) {
-        ApiErrorResponse apiErrorResponse = new ApiErrorResponse(404, "Operación fallida","Resource not found");
+        ApiErrorResponse apiErrorResponse = new ApiErrorResponse(404, "Operación fallida","Recurso no encontrado");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(apiErrorResponse);
     }
 }

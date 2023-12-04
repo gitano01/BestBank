@@ -15,11 +15,13 @@ public class BestBankApplication {
 		SpringApplication app = new SpringApplication(BestBankApplication.class); 
 		Map<String,Object> map = new HashMap<>();
         map.put("server.port", "8080");
+		map.put("spring.mvc.throw-exception-if-no-handler-found",true);
         //map.put("server.adress", "0.0.0.0");       
         app.setDefaultProperties(map);
         app.run(args);
 	}
 }
+
 
 
 

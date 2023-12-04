@@ -3,9 +3,6 @@ package com.bcn.model.Responses;
 public class ApiErrorResponse extends ApiResponse{
     
     private Object detalles;
-
-
-
     public ApiErrorResponse(int codigo, String mensaje, Object detalles) {
         super(codigo, mensaje);
         this.detalles = detalles;
