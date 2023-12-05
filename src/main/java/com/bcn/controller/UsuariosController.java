@@ -46,7 +46,7 @@ public class UsuariosController {
       throw new Exception(e.getMessage());
     }
     if (lista != null) {
-        apiResponse = new ApiSuccessResponse(Constantes.Codigo.OK, Constantes.Mensaje.MSG_SUCCES, lista);
+        apiResponse = new ApiSuccessResponse(Constantes.Codigo.OK, Constantes.Mensaje.MSG_SUCCESS, lista);
       return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.OK);
     } else {
       apiResponse = new ApiErrorResponse(Constantes.Codigo.NOT_FOUND, Constantes.Mensaje.MSG_FAILED, "No existen usuarios registrados");
@@ -66,7 +66,7 @@ public class UsuariosController {
    try {      
       usr = userService.getUsuario(Integer.parseInt(id));
       if (usr != null) {
-        apiResponse = new ApiSuccessResponse(Constantes.Codigo.OK, Constantes.Mensaje.MSG_SUCCES, usr);
+        apiResponse = new ApiSuccessResponse(Constantes.Codigo.OK, Constantes.Mensaje.MSG_SUCCESS, usr);
       return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.OK);
     } else {
       apiResponse = new ApiErrorResponse(Constantes.Codigo.NOT_FOUND, Constantes.Mensaje.MSG_FAILED,"No existen usuarios registrados");
@@ -86,7 +86,7 @@ public class UsuariosController {
     try {
       mensaje = userService.postUsuario(usr);
       if (mensaje.equals("OK")){
-        apiResponse = new ApiSuccessResponse(Constantes.Codigo.CREATED, Constantes.Mensaje.MSG_SUCCES, "Usuario creado");
+        apiResponse = new ApiSuccessResponse(Constantes.Codigo.CREATED, Constantes.Mensaje.MSG_SUCCESS, "Usuario creado");
         return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.OK);
       }else{
         apiResponse = new ApiErrorResponse(Constantes.Codigo.BAD_REQUEST, Constantes.Mensaje.MSG_FAILED,mensaje);
@@ -107,7 +107,7 @@ public class UsuariosController {
     try {
       mensaje = userService.putUsuario(usr, Integer.parseInt(id));
       if (mensaje.equals("OK")){
-       apiResponse = new ApiSuccessResponse(Constantes.Codigo.OK, Constantes.Mensaje.MSG_SUCCES, "Usuario actualizado");
+       apiResponse = new ApiSuccessResponse(Constantes.Codigo.OK, Constantes.Mensaje.MSG_SUCCESS, "Usuario actualizado");
         return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.OK);
       }else{
         apiResponse = new ApiErrorResponse(Constantes.Codigo.BAD_REQUEST, Constantes.Mensaje.MSG_FAILED,mensaje);
@@ -128,7 +128,7 @@ public class UsuariosController {
     try {
       mensaje = userService.deactiveUsuario(Integer.parseInt(id));
       if (mensaje.equals("OK")){
-        apiResponse = new ApiSuccessResponse(Constantes.Codigo.OK, Constantes.Mensaje.MSG_SUCCES, "Usuario dado de baja");
+        apiResponse = new ApiSuccessResponse(Constantes.Codigo.OK, Constantes.Mensaje.MSG_SUCCESS, "Usuario dado de baja");
         return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.OK);
        } else{
         apiResponse = new ApiErrorResponse(Constantes.Codigo.BAD_REQUEST, Constantes.Mensaje.MSG_FAILED,mensaje);
@@ -149,7 +149,7 @@ public class UsuariosController {
     try {
       mensaje = userService.activeUsuario(Integer.parseInt(id));
       if (mensaje.equals("OK")){
-        apiResponse = new ApiSuccessResponse(Constantes.Codigo.OK, Constantes.Mensaje.MSG_SUCCES, "Activacion de usuario realizada");
+        apiResponse = new ApiSuccessResponse(Constantes.Codigo.OK, Constantes.Mensaje.MSG_SUCCESS, "Activacion de usuario realizada");
         return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.OK);
       }else{
         apiResponse = new ApiErrorResponse(Constantes.Codigo.BAD_REQUEST, Constantes.Mensaje.MSG_FAILED,mensaje);
@@ -170,7 +170,7 @@ public class UsuariosController {
       throw new Exception(e.getMessage());
     }
     if (usr != null) {
-      apiResponse = new ApiSuccessResponse(Constantes.Codigo.OK, Constantes.Mensaje.MSG_SUCCES, usr);
+      apiResponse = new ApiSuccessResponse(Constantes.Codigo.OK, Constantes.Mensaje.MSG_SUCCESS, usr);
       return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.OK);
     } else {
       apiResponse = new ApiErrorResponse(Constantes.Codigo.NOT_FOUND, Constantes.Mensaje.MSG_FAILED,"No existen usuarios registrados");

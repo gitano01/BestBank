@@ -4,6 +4,7 @@ package com.bcn.service.DaoRol;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,8 +45,11 @@ private ResultSet rs = null;
                     jObj = utils.getJsonObject(rs);
                 }while(rs.next());
             }
-        }catch(Exception e){
-            throw new Exception (e.getMessage());
+        }catch(SQLException e){
+            throw new SQLException (e.getMessage());
+        
+        }catch(Exception ex){
+            throw new Exception (ex.getMessage());
         }finally{
             db.closeConnection(conn, ps, rs);
         }
@@ -71,9 +75,11 @@ private ResultSet rs = null;
                     jArray.add(jObj);
                 }while(rs.next());
             }
-        }catch(Exception e){
-            throw new Exception (e.getMessage());
-        }finally{
+        }
+        catch(Exception ex){
+            throw new Exception (ex.getMessage());
+        }
+        finally{
             db.closeConnection(conn, ps, rs);
         }
 
@@ -117,9 +123,10 @@ private ResultSet rs = null;
         String response="";
         try{
             conn = db.getConnection();
-            ps = conn.prepareStatement("update roles set rol=?, descripcion=? where rol_id=?");
+            ps = conn.prepareStatement("update roles set rol=?, descripcion=?, fecha_modificacion = ? where rol_id=?");
             ps.setString(1, rol.getRol());
-            ps.setString(2, rol.getDescripcion());
+            ps.setTimestamp(2, utils.getFechaHoy());
+            ps.setString(3, rol.getDescripcion());
             ps.setInt(3, id);
 
             if(ps.executeUpdate() == 1){
@@ -129,7 +136,7 @@ private ResultSet rs = null;
                 System.out.println("Error al actualizar rol");
 				response = "No se pudo actualizar el rol";
             }
-        }catch(Exception e){
+        }catch(SQLException e){
             throw new Exception(e.getMessage());
         }finally{
             db.closeConnection(conn, ps, rs);

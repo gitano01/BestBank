@@ -84,7 +84,7 @@ public class UsuarioDaoServiceImplement implements UsuarioDaoService {
         if(jObject != null){
             usr = new  Gson().fromJson(jObject.getAsJsonObject().toString(), Usuario.class);
         }
-        // TODO Auto-generated method stub
+        
         return usr;
     }
 
@@ -118,13 +118,13 @@ public class UsuarioDaoServiceImplement implements UsuarioDaoService {
         }finally{
             db.closeConnection(conn, ps, rs);
         }
-        // TODO Auto-generated method stub
+        
         return response;
     }
 
     
     public String deactiveUsuario(int id) throws Exception {
-        // TODO Auto-generated method stub
+        
         String response="";
         try{
         conn = db.getConnection();
@@ -148,7 +148,7 @@ public class UsuarioDaoServiceImplement implements UsuarioDaoService {
     }
 
     public String activeUsuario(int id) throws Exception {
-        // TODO Auto-generated method stub
+        
         String response="";
         try{
         conn = db.getConnection();
@@ -224,7 +224,7 @@ public class UsuarioDaoServiceImplement implements UsuarioDaoService {
             usr = new  Gson().fromJson(jObject.getAsJsonObject().toString(), Usuario.class);
             usr.setContrasenia(null);
         }
-        // TODO Auto-generated method stub
+        
         return usr;
     }    
     
