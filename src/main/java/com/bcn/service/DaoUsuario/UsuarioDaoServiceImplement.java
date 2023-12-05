@@ -24,7 +24,7 @@ public class UsuarioDaoServiceImplement implements UsuarioDaoService {
     private DbConnect db;
 
     @Autowired
-    private static  UtilsGeneric utils;
+    private UtilsGeneric utils;
     
     Connection conn;
     PreparedStatement ps;
@@ -84,7 +84,7 @@ public class UsuarioDaoServiceImplement implements UsuarioDaoService {
         if(jObject != null){
             usr = new  Gson().fromJson(jObject.getAsJsonObject().toString(), Usuario.class);
         }
-        
+        // TODO Auto-generated method stub
         return usr;
     }
 
@@ -118,20 +118,21 @@ public class UsuarioDaoServiceImplement implements UsuarioDaoService {
         }finally{
             db.closeConnection(conn, ps, rs);
         }
-        
+        // TODO Auto-generated method stub
         return response;
     }
 
     
     public String deactiveUsuario(int id) throws Exception {
-        
+        // TODO Auto-generated method stub
         String response="";
         try{
         conn = db.getConnection();
-        ps = conn.prepareStatement("update usuarios set activo=false where usuario_id= ? and fecha_modificacion = ?");        
-        ps.setInt(1, id);
-        ps.setTimestamp(2, utils.getFechaHoy());
-        if (ps.executeUpdate() == 0) {
+        ps = conn.prepareStatement("update usuarios set activo=false,fecha_modificacion=? where usuario_id= ?");        
+        ps.setTimestamp(1, utils.getFechaHoy());
+        ps.setInt(2, id);        
+        System.out.println(ps.toString());
+        if (ps.executeUpdate() == 1) {
 				System.out.println("Usuario dado de baja temporal");
 				response = "OK";
 			} else {
@@ -147,14 +148,15 @@ public class UsuarioDaoServiceImplement implements UsuarioDaoService {
     }
 
     public String activeUsuario(int id) throws Exception {
-        
+        // TODO Auto-generated method stub
         String response="";
         try{
         conn = db.getConnection();
-        ps = conn.prepareStatement("update usuarios set activo=true where usuario_id= ? and fecha_modificacion = ?");        
-        ps.setInt(1, id);
-        ps.setTimestamp(2, utils.getFechaHoy());        
-        if (ps.executeUpdate() == 0) {
+        ps = conn.prepareStatement("update usuarios set activo=true,fecha_modificacion = ? where usuario_id= ? ");        
+        
+        ps.setTimestamp(1, utils.getFechaHoy()); 
+        ps.setInt(2, id);       
+        if (ps.executeUpdate() == 1) {
 				System.out.println("Usuario activado");
 				response = "OK";
 			} else {
@@ -222,7 +224,7 @@ public class UsuarioDaoServiceImplement implements UsuarioDaoService {
             usr = new  Gson().fromJson(jObject.getAsJsonObject().toString(), Usuario.class);
             usr.setContrasenia(null);
         }
-        
+        // TODO Auto-generated method stub
         return usr;
     }    
     
