@@ -14,7 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bcn.model.Permiso;
+import com.bcn.model.Responses.ApiErrorResponse;
+import com.bcn.model.Responses.ApiResponse;
+import com.bcn.model.Responses.ApiSuccessResponse;
 import com.bcn.service.DaoPermiso.PermisoDaoServiceImplement;
+import com.bcn.utils.Constantes;
+import com.bcn.utils.UtilsGeneric;
+
 
 @RestController
 @RequestMapping("/permisos")
@@ -22,62 +28,90 @@ public class PermisosController {
 
     @Autowired
     private PermisoDaoServiceImplement permisoService;
-    String response ="";
+    
+    @Autowired
+    private UtilsGeneric utils;
+
+    private ApiResponse apiResponse;
+    String response = "";
 
     @GetMapping("/getPermiso/{id}")//obtiene el Rol
-    public ResponseEntity<?> getpermiso(@PathVariable String id) throws Exception{
+    public ResponseEntity<ApiResponse> getpermiso(@PathVariable String id) throws Exception{
+        if (!utils.isnumeric(id)) {
+            apiResponse = new ApiErrorResponse(Constantes.Codigo.BAD_REQUEST, Constantes.Mensaje.MSG_FAILED,
+                    "El parámetro id debe ser un dato numerico");
+            return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.BAD_REQUEST);
+        }
         try{
             Permiso permiso = permisoService.getPermiso(Integer.parseInt(id));
             if(permiso != null){
-                return new ResponseEntity<Permiso>(permiso,HttpStatus.OK);
+                apiResponse = new ApiSuccessResponse(Constantes.Codigo.OK, Constantes.Mensaje.MSG_SUCCESS, permiso);
+                return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.OK);
             }else{
-                return new ResponseEntity<String>("No existe el permiso a buscar",HttpStatus.NOT_FOUND);
+                apiResponse = new ApiErrorResponse(Constantes.Codigo.NOT_FOUND, Constantes.Mensaje.MSG_FAILED, "No existe el permiso  a buscar");
+                return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.NOT_FOUND);
             }
         }catch(Exception e){
-            throw new Exception(e.getMessage());
+            apiResponse = new ApiErrorResponse(Constantes.Codigo.INTERNAL_SERVER_ERROR, Constantes.Mensaje.MSG_FAILED,e.getMessage());
+                return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }        
     }
     
     @GetMapping("/getPermisos")//obtiene el Rol
-    public ResponseEntity<?> getPermisos() throws Exception{
+    public ResponseEntity<ApiResponse> getPermisos() throws Exception{
         try{
             List<Permiso> lista = permisoService.getPermisos();
 
             if(lista != null){
-                return new ResponseEntity<List<Permiso>>(lista,HttpStatus.OK);
+
+                apiResponse = new ApiSuccessResponse(Constantes.Codigo.OK, Constantes.Mensaje.MSG_SUCCESS,lista);
+                return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.OK);
             }else{
-                return new ResponseEntity<String>("No existen registros de permisos",HttpStatus.NOT_FOUND);
+                apiResponse = new ApiErrorResponse(Constantes.Codigo.NOT_FOUND, Constantes.Mensaje.MSG_FAILED,"No existen registros de permisos");
+                return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.NOT_FOUND);
             }
         }catch(Exception e){
-            throw new Exception(e.getMessage());
+            apiResponse = new ApiErrorResponse(Constantes.Codigo.INTERNAL_SERVER_ERROR, Constantes.Mensaje.MSG_FAILED,e.getMessage());
+            return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }        
     }
 
     @PostMapping("/addPermiso")//obtiene el Rol
-    public ResponseEntity<?> postPermiso(@RequestBody Permiso permiso) throws Exception{            
+    public ResponseEntity<ApiResponse> postPermiso(@RequestBody Permiso permiso) throws Exception{            
         try{
             response = permisoService.postPermiso(permiso);
             if(response.equals("OK") ){
-                return new ResponseEntity<String>("Permiso creado", HttpStatus.OK);
+                apiResponse = new ApiSuccessResponse(Constantes.Codigo.CREATED, Constantes.Mensaje.MSG_SUCCESS,"Permiso creado");
+                return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.OK);
             }else{
-                return new ResponseEntity<String>(response, HttpStatus.BAD_REQUEST);
+                apiResponse = new ApiErrorResponse(Constantes.Codigo.NOT_FOUND, Constantes.Mensaje.MSG_FAILED,response);
+                return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.BAD_REQUEST);
             }    
         }catch(Exception e){
-            throw new Exception(e.getMessage());
+            apiResponse = new ApiErrorResponse(Constantes.Codigo.INTERNAL_SERVER_ERROR, Constantes.Mensaje.MSG_FAILED,e.getMessage());
+            return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PutMapping("/updatePermiso/{id}")//obtiene el Rol
-    public ResponseEntity<?> updateRol(@RequestBody Permiso permiso, @PathVariable String id) throws Exception{        
+    public ResponseEntity<ApiResponse> updateRol(@RequestBody Permiso permiso, @PathVariable String id) throws Exception{   
+        if (!utils.isnumeric(id)) {
+            apiResponse = new ApiErrorResponse(Constantes.Codigo.BAD_REQUEST, Constantes.Mensaje.MSG_FAILED,
+                    "El parámetro id debe ser un dato numerico");
+            return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.BAD_REQUEST);
+        }     
         try{
             response = permisoService.putPermiso(permiso, Integer.parseInt(id));
             if(response.equals("OK") ){
-                return new ResponseEntity<String>("Permiso actualizado", HttpStatus.OK);
+                apiResponse = new ApiSuccessResponse(Constantes.Codigo.CREATED, Constantes.Mensaje.MSG_SUCCESS,"Permiso actualizado");
+                return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.OK);
             }else{
-                return new ResponseEntity<String>(response, HttpStatus.BAD_REQUEST);
+                apiResponse = new ApiErrorResponse(Constantes.Codigo.NOT_FOUND, Constantes.Mensaje.MSG_FAILED,response);
+                return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.BAD_REQUEST);
             }            
         }catch(Exception e){
-            throw new Exception(e.getMessage());
+            apiResponse = new ApiErrorResponse(Constantes.Codigo.INTERNAL_SERVER_ERROR, Constantes.Mensaje.MSG_FAILED,e.getMessage());
+                return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }        
     }
 
