@@ -79,5 +79,4 @@ public class UtilsGeneric {
 		Long datetime = System.currentTimeMillis();
 		return new Timestamp(datetime);
 	}
-
 }

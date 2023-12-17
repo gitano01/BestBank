@@ -1,7 +1,5 @@
 package com.bcn.model;
 
-import java.sql.Timestamp;
-
 public class Usuario {
     private int usuario_id;
     private String usuario;
@@ -9,7 +7,7 @@ public class Usuario {
     private String email;
     private boolean activo;
     private int rol_id;
-    private int permiso_id;
+    private int permiso_id; 
     private int empleado_id;
     private String fecha_alta;
     private String fecha_baja;
