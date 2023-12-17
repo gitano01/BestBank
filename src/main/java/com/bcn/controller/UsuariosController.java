@@ -1,6 +1,5 @@
 package com.bcn.controller;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bcn.model.Usuario;
+import com.bcn.model.Responses.ApiErrorResponse;
+import com.bcn.model.Responses.ApiResponse;
+import com.bcn.model.Responses.ApiSuccessResponse;
 import com.bcn.service.DaoUsuario.UsuarioDaoServiceImplement;
+import com.bcn.utils.Constantes;
+import com.bcn.utils.UtilsGeneric;
 
 
 @RestController
@@ -25,49 +29,69 @@ public class UsuariosController {
   @Autowired
   private UsuarioDaoServiceImplement userService;
 
+  @Autowired
+  private UtilsGeneric utils;
+
+  private ApiResponse apiResponse;
+
+  String mensaje = "";
+  
   // Obtener la coleccion de usuarios
   @GetMapping("/getUsuarios")
-  public ResponseEntity<?> getUsuarios() throws Exception {
-    List<Usuario> lista;
+  public ResponseEntity<ApiResponse> getUsuarios() throws Exception {
+    List<Usuario> lista;   
     try {
-      lista = userService.getDatos();
-
+      lista = userService.getDatos();      
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }
     if (lista != null) {
-      return new ResponseEntity<List<Usuario>>(lista, HttpStatus.OK);
+        apiResponse = new ApiSuccessResponse(Constantes.Codigo.OK, Constantes.Mensaje.MSG_SUCCESS, lista);
+      return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.OK);
     } else {
-      return new ResponseEntity<String>("No existen usuarios registrados", HttpStatus.NOT_FOUND);
+      apiResponse = new ApiErrorResponse(Constantes.Codigo.NOT_FOUND, Constantes.Mensaje.MSG_FAILED, "No existen usuarios registrados");
+      return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.NOT_FOUND);
     }
+    
   }
 
   // Obtener el usuario por Id
   @GetMapping("/getUsuario/{id}")
-  public ResponseEntity<?> getUsuario(@PathVariable String id) throws Exception {
+  public ResponseEntity<ApiResponse> getUsuario(@PathVariable(required = true) String id) throws Exception {
     Usuario usr;
-    try {
+    if(!utils.isnumeric(id)){ 
+        apiResponse = new ApiErrorResponse(Constantes.Codigo.BAD_REQUEST, Constantes.Mensaje.MSG_FAILED,"El parámetro id debe ser un dato numerico");
+        return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.BAD_REQUEST);
+      }
+   try {      
       usr = userService.getUsuario(Integer.parseInt(id));
+      if (usr != null) {
+        apiResponse = new ApiSuccessResponse(Constantes.Codigo.OK, Constantes.Mensaje.MSG_SUCCESS, usr);
+      return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.OK);
+    } else {
+      apiResponse = new ApiErrorResponse(Constantes.Codigo.NOT_FOUND, Constantes.Mensaje.MSG_FAILED,"No existen usuarios registrados");
+      return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.NOT_FOUND);
+    }
     } catch (Exception e) {
+
       throw new Exception(e.getMessage());
     }
-    if (usr != null) {
-      return new ResponseEntity<Usuario>(usr, HttpStatus.OK);
-    } else {
-      return new ResponseEntity<String>("No existen usuarios registrados", HttpStatus.NOT_FOUND);
-    }
+    
   }
 
   // Dar de alta un usuario
   @PostMapping("/addUsuario")
-  public ResponseEntity<?> postUsuario(@RequestBody Usuario usr) throws Exception {
-    String mensaje = "";
+  public ResponseEntity<ApiResponse> postUsuario(@RequestBody Usuario usr) throws Exception {
+
     try {
       mensaje = userService.postUsuario(usr);
-      if (mensaje.equals("OK"))
-        return new ResponseEntity<String>("Usuario creado", HttpStatus.OK);
-      else
-        return new ResponseEntity<String>(mensaje, HttpStatus.BAD_REQUEST);
+      if (mensaje.equals("OK")){
+        apiResponse = new ApiSuccessResponse(Constantes.Codigo.CREATED, Constantes.Mensaje.MSG_SUCCESS, "Usuario creado");
+        return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.OK);
+      }else{
+        apiResponse = new ApiErrorResponse(Constantes.Codigo.BAD_REQUEST, Constantes.Mensaje.MSG_FAILED,mensaje);
+        return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.BAD_REQUEST);
+      }
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }
@@ -75,14 +99,20 @@ public class UsuariosController {
 
   //Actualizacion de usuario
    @PutMapping("/updateUsuario/{id}")
-  public ResponseEntity<?> putUsuario(@RequestBody Usuario usr, @PathVariable String id) throws Exception {
-    String mensaje = "";
+  public ResponseEntity<ApiResponse> putUsuario(@RequestBody Usuario usr, @PathVariable(required=true) String id) throws Exception {
+    if(!utils.isnumeric(id)){ 
+        apiResponse = new ApiErrorResponse(Constantes.Codigo.BAD_REQUEST, Constantes.Mensaje.MSG_FAILED,"El parámetro id debe ser un dato numerico");
+        return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.BAD_REQUEST);
+      }
     try {
       mensaje = userService.putUsuario(usr, Integer.parseInt(id));
-      if (mensaje.equals("OK"))
-        return new ResponseEntity<String>("Usuario actualizado", HttpStatus.OK);
-      else
-        return new ResponseEntity<String>(mensaje, HttpStatus.BAD_REQUEST);
+      if (mensaje.equals("OK")){
+       apiResponse = new ApiSuccessResponse(Constantes.Codigo.OK, Constantes.Mensaje.MSG_SUCCESS, "Usuario actualizado");
+        return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.OK);
+      }else{
+        apiResponse = new ApiErrorResponse(Constantes.Codigo.BAD_REQUEST, Constantes.Mensaje.MSG_FAILED,mensaje);
+        return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.BAD_REQUEST);
+      }
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }
@@ -90,14 +120,20 @@ public class UsuariosController {
 
    //Desactivar usuario
    @PutMapping("/deactiveUsuario/{id}")
-  public ResponseEntity<?> deactiveUsuario(@PathVariable String id) throws Exception {
-    String mensaje = "";
+  public ResponseEntity<ApiResponse> deactiveUsuario(@PathVariable(required=true) String id) throws Exception {
+    if(!utils.isnumeric(id)){ 
+        apiResponse = new ApiErrorResponse(Constantes.Codigo.BAD_REQUEST, Constantes.Mensaje.MSG_FAILED,"El parámetro id debe ser un dato numerico");
+        return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.BAD_REQUEST);
+      }
     try {
       mensaje = userService.deactiveUsuario(Integer.parseInt(id));
-      if (mensaje.equals("OK"))
-        return new ResponseEntity<String>("Baja de usuario realizada", HttpStatus.OK);
-      else
-        return new ResponseEntity<String>(mensaje, HttpStatus.BAD_REQUEST);
+      if (mensaje.equals("OK")){
+        apiResponse = new ApiSuccessResponse(Constantes.Codigo.OK, Constantes.Mensaje.MSG_SUCCESS, "Usuario dado de baja");
+        return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.OK);
+       } else{
+        apiResponse = new ApiErrorResponse(Constantes.Codigo.BAD_REQUEST, Constantes.Mensaje.MSG_FAILED,mensaje);
+        return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.BAD_REQUEST);
+       }
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }
@@ -105,14 +141,20 @@ public class UsuariosController {
   //
   //Activar usuario
    @PutMapping("/activeUsuario/{id}")
-  public ResponseEntity<?> activeUsuario(@PathVariable String id) throws Exception {
-    String mensaje = "";
+  public ResponseEntity<ApiResponse> activeUsuario(@PathVariable(required=true) String id) throws Exception {
+   if(!utils.isnumeric(id)){ 
+        apiResponse = new ApiErrorResponse(Constantes.Codigo.BAD_REQUEST, Constantes.Mensaje.MSG_FAILED,"El parámetro id debe ser un dato numerico");
+        return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.BAD_REQUEST);
+      }
     try {
       mensaje = userService.activeUsuario(Integer.parseInt(id));
-      if (mensaje.equals("OK"))
-        return new ResponseEntity<String>("Activacion de usuario realizada", HttpStatus.OK);
-      else
-        return new ResponseEntity<String>(mensaje, HttpStatus.BAD_REQUEST);
+      if (mensaje.equals("OK")){
+        apiResponse = new ApiSuccessResponse(Constantes.Codigo.OK, Constantes.Mensaje.MSG_SUCCESS, "Activacion de usuario realizada");
+        return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.OK);
+      }else{
+        apiResponse = new ApiErrorResponse(Constantes.Codigo.BAD_REQUEST, Constantes.Mensaje.MSG_FAILED,mensaje);
+        return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.BAD_REQUEST);
+      }
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }
@@ -120,7 +162,7 @@ public class UsuariosController {
 
   // Obtener el usuario por Id
   @PostMapping("/login")
-  public ResponseEntity<?> loginUsuario(@RequestBody Usuario usuario) throws Exception {
+  public ResponseEntity<ApiResponse> loginUsuario(@RequestBody Usuario usuario) throws Exception {
     Usuario usr;
     try {
       usr = userService.loginUsuario(usuario);
@@ -128,9 +170,11 @@ public class UsuariosController {
       throw new Exception(e.getMessage());
     }
     if (usr != null) {
-      return new ResponseEntity<Usuario>(usr, HttpStatus.OK);
+      apiResponse = new ApiSuccessResponse(Constantes.Codigo.OK, Constantes.Mensaje.MSG_SUCCESS, usr);
+      return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.OK);
     } else {
-      return new ResponseEntity<String>("No existen usuarios registrados", HttpStatus.NOT_FOUND);
+      apiResponse = new ApiErrorResponse(Constantes.Codigo.NOT_FOUND, Constantes.Mensaje.MSG_FAILED,"No existen usuarios registrados");
+      return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.NOT_FOUND);
     }
   }
 

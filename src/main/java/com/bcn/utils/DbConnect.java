@@ -10,7 +10,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DbConnect {
-	private static final String JBDC_URL = "jdbc:postgresql://localhost:5433/best_bank";
+	private static final String JBDC_URL = "jdbc:postgresql://localhost:5433/best_bank";// desarrollo de victor
+	//private static final String JBDC_URL = "jdbc:postgresql://localhost:5432/best_bank";
 	private static final String JDBC_USER = "postgres";
 	private static final String JDBC_PASSWORD = "postgres";
 
