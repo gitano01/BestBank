@@ -80,10 +80,12 @@ public class UtilsGeneric {
 		return new Timestamp(datetime);
 	}
 
+	}
 	public boolean isnumeric(String s){		
 		if (s == null || s.equals("")) {
             return false;
         } 
+
         for (int i = 0; i < s.length(); i++)
         {
             char c = s.charAt(i);
@@ -92,7 +94,5 @@ public class UtilsGeneric {
             }
         }
         return true;
-	}
-
 
 }
