@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bcn.model.Cuentas;
-import com.bcn.service.CuentasDaoServiceImplement;
+import com.bcn.service.DaoCuenta.CuentaDaoServiceImplement;
 
 @RestController
 @RequestMapping(value = "/cuentas")
 public class CuentasController {
 	@Autowired
-	CuentasDaoServiceImplement cuentasService;
+	CuentaDaoServiceImplement cuentasService;
 
 	@GetMapping("/getCuentas")
 	public ResponseEntity<?> getCuentas() throws Exception {

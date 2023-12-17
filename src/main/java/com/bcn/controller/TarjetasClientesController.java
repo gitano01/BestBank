@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bcn.model.TarjetasClientes;
-import com.bcn.service.DaoTarjetaCliente.TarjetasClientesDaoServiceImplement;
+import com.bcn.service.DaoTarjetaCliente.TarjetaClienteDaoServiceImplement;
 
 @RestController
 @RequestMapping(value = "/tarjetas/customer")
 public class TarjetasClientesController {
 	@Autowired
-	TarjetasClientesDaoServiceImplement tarjetasService;
+	TarjetaClienteDaoServiceImplement tarjetasService;
 
 	@GetMapping("/getDatos")
 	public ResponseEntity<?> getDatos() throws Exception {

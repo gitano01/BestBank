@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bcn.model.Sucursales;
-import com.bcn.service.SucursalesDaoServiceImplement;
+import com.bcn.service.DaoSucursal.SucursalDaoServiceImplement;
 
 @RestController
 @RequestMapping(value = "/sucursales")
 public class SucursalesController {
 	@Autowired
-	SucursalesDaoServiceImplement sucursalesService;
+	SucursalDaoServiceImplement sucursalesService;
 
 	@GetMapping(value = "/getDatos")
 	public ResponseEntity<?> getDatos() throws Exception {

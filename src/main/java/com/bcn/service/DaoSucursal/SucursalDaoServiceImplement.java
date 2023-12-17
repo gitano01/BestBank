@@ -1,4 +1,4 @@
-package com.bcn.service;
+package com.bcn.service.DaoSucursal;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,7 +15,7 @@ import com.bcn.model.Sucursales;
 import com.bcn.utils.DbConnect;
 
 @Service
-public class SucursalesDaoServiceImplement implements SucursalesDaoService {
+public class SucursalDaoServiceImplement implements SucursalDaoService {
 	@Autowired
 	private DbConnect con;
 	Connection conn = null;
@@ -41,7 +41,7 @@ public class SucursalesDaoServiceImplement implements SucursalesDaoService {
 		Sucursales sucursal = null;
 		try {
 			conn = con.getConnection();
-			ps = conn.prepareStatement("select * from sucursal;");
+			ps = conn.prepareStatement("select * from sucursales;");
 
 			if ((rs = ps.executeQuery()).next()) {
 				do {
@@ -77,7 +77,7 @@ public class SucursalesDaoServiceImplement implements SucursalesDaoService {
 		Sucursales sucursal = null;
 		try {
 			conn = con.getConnection();
-			ps = conn.prepareStatement("select * from sucursal where sucursal_id = ?;");
+			ps = conn.prepareStatement("select * from sucursales where sucursal_id = ?;");
 			ps.setInt(1, id);
 
 			if ((rs = ps.executeQuery()).next()) {
@@ -113,7 +113,7 @@ public class SucursalesDaoServiceImplement implements SucursalesDaoService {
 			conn = con.getConnection();
 			Long datetime = System.currentTimeMillis();
 			Timestamp tp = new Timestamp(datetime);
-			String sql = "insert into sucursal (nombre, numero_sucursal, direccion, telefono, ciudad, estado, fecha_apertura)"
+			String sql = "insert into sucursales (nombre, numero_sucursal, direccion, telefono, ciudad, estado, fecha_apertura)"
 					+ "values(?,?,?,?,?,?,?)";
 			ps = conn.prepareStatement(sql);
 
@@ -147,7 +147,7 @@ public class SucursalesDaoServiceImplement implements SucursalesDaoService {
 
 		try {
 			conn = con.getConnection();
-			String sql = "update sucursal set nombre= ?, numero_sucursal = ?, telefono = ?, direccion = ?, ciudad = ?, estado = ? where sucursal_id = "
+			String sql = "update sucursales set nombre= ?, numero_sucursal = ?, telefono = ?, direccion = ?, ciudad = ?, estado = ? where sucursal_id = "
 					+ id + ";";
 			ps = conn.prepareStatement(sql);
 
@@ -180,7 +180,7 @@ public class SucursalesDaoServiceImplement implements SucursalesDaoService {
 			long datetime = System.currentTimeMillis();
 			Timestamp tp = new Timestamp(datetime);
 			conn = con.getConnection();
-			String sql = "update sucursal set fecha_cierre = ? where sucursal_id = " + id + ";";
+			String sql = "update sucursales set fecha_cierre = ? where sucursal_id = " + id + ";";
 			ps = conn.prepareStatement(sql);
 
 			ps.setTimestamp(1, tp);
@@ -205,7 +205,7 @@ public class SucursalesDaoServiceImplement implements SucursalesDaoService {
 		String response = "";
 		try {
 			conn = con.getConnection();
-			String sql = "delete from sucursal where sucursal_id = " + id + ";";
+			String sql = "delete from sucursales where sucursal_id = " + id + ";";
 			ps = conn.prepareStatement(sql);
 
 			if (ps.executeUpdate() == 1) {
