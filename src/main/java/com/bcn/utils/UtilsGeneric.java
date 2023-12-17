@@ -80,7 +80,7 @@ public class UtilsGeneric {
 		return new Timestamp(datetime);
 	}
 
-	}
+	
 	public boolean isnumeric(String s){		
 		if (s == null || s.equals("")) {
             return false;
@@ -94,5 +94,5 @@ public class UtilsGeneric {
             }
         }
         return true;
-
+	}
 }
