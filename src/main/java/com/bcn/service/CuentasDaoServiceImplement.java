@@ -7,12 +7,12 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bcn.model.Cuentas;
+import com.bcn.model.TarjetasClientes;
 import com.bcn.utils.DbConnect;
 
 @Service
@@ -239,5 +239,35 @@ public class CuentasDaoServiceImplement implements CuentasDaoService {
 			con.closeConnection(conn, ps);
 		}
 		return response;
+	}
+
+	// Common Methods
+	public Cuentas getCuentaCliente(DbConnect con, TarjetasClientes tarjeta_cliente) throws Exception, SQLException {
+		Cuentas cuenta = null;
+		try {
+			conn = con.getConnection();
+			ps = conn.prepareStatement(
+					"select cuenta_id, saldo_inicial, saldo_maximo, balance, cliente_id from cuenta where cuenta_id = "
+							+ tarjeta_cliente.getCuentaId() + " and cliente_id = " + tarjeta_cliente.getClienteId()
+							+ ";");
+
+			if ((rs = ps.executeQuery()).next()) {
+				cuenta = new Cuentas();
+				cuenta.setCuentaId(rs.getInt("cuenta_id"));
+				cuenta.setSaldoInicial(rs.getDouble("saldo_inicial"));
+				cuenta.setSaldoMaximo(rs.getDouble("saldo_maximo"));
+				cuenta.setBalance(rs.getDouble("balance"));
+				cuenta.setClienteId(rs.getInt("cliente_id"));
+
+			} else {
+				System.out.println("No se encontró información de la cuenta");
+				cuenta = null;
+			}
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		} finally {
+			con.closeConnection(conn, ps, rs);
+		}
+		return cuenta;
 	}
 }
