@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.bcn.model.TarjetasClientes;
 
-public interface TarjetasClientesDaoService {
+public interface TarjetaClienteDaoService {
 	public List<List<?>> getDatos() throws Exception, SQLException;
 
 	public List<TarjetasClientes> getTarjetas() throws Exception, SQLException;

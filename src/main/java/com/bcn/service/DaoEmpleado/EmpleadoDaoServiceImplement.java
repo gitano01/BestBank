@@ -1,4 +1,4 @@
-package com.bcn.service;
+package com.bcn.service.DaoEmpleado;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,7 +15,7 @@ import com.bcn.model.Empleados;
 import com.bcn.utils.DbConnect;
 
 @Service
-public class EmpleadosDaoServiceImplement implements EmpleadosDaoService {
+public class EmpleadoDaoServiceImplement implements EmpleadoDaoService {
 	@Autowired
 	private DbConnect con;
 
@@ -29,7 +29,7 @@ public class EmpleadosDaoServiceImplement implements EmpleadosDaoService {
 		Empleados empleado = null;
 		try {
 			conn = con.getConnection();
-			ps = conn.prepareStatement("select * from empleado");
+			ps = conn.prepareStatement("select * from empleados");
 
 			if ((rs = ps.executeQuery()).next()) {
 				do {
@@ -83,7 +83,7 @@ public class EmpleadosDaoServiceImplement implements EmpleadosDaoService {
 		Empleados empleado = null;
 		try {
 			conn = con.getConnection();
-			ps = conn.prepareStatement("select * from empleado where empleado_id = ?");
+			ps = conn.prepareStatement("select * from empleados where empleado_id = ?");
 			ps.setInt(1, id);
 
 			if ((rs = ps.executeQuery()).next()) {
@@ -124,7 +124,7 @@ public class EmpleadosDaoServiceImplement implements EmpleadosDaoService {
 		Timestamp tp = new Timestamp(datetime);
 		try {
 			conn = con.getConnection();
-			String sql = "insert into empleado(nombre, apellido_paterno, apellido_materno, telefono, direccion, colonia, ciudad, estado, codigo_postal, departamento, email, activo, fecha_alta, sucursal_id)"
+			String sql = "insert into empleados(nombre, apellido_paterno, apellido_materno, telefono, direccion, colonia, ciudad, estado, codigo_postal, departamento, email, activo, fecha_alta, sucursal_id)"
 					+ "values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, empleado.getNombre());
@@ -162,7 +162,7 @@ public class EmpleadosDaoServiceImplement implements EmpleadosDaoService {
 		String response = "";
 		try {
 			conn = con.getConnection();
-			String sql = "update empleado set nombre = ?, apellido_paterno = ?, apellido_materno = ?, telefono = ?, direccion = ?, colonia = ?, ciudad = ?, estado = ?, codigo_postal = ?, departamento = ?, email = ?, activo = ?, sucursal_id = ? "
+			String sql = "update empleados set nombre = ?, apellido_paterno = ?, apellido_materno = ?, telefono = ?, direccion = ?, colonia = ?, ciudad = ?, estado = ?, codigo_postal = ?, departamento = ?, email = ?, activo = ?, sucursal_id = ? "
 					+ "where empleado_id = " + id + ";";
 
 			ps = conn.prepareStatement(sql);
@@ -200,7 +200,7 @@ public class EmpleadosDaoServiceImplement implements EmpleadosDaoService {
 		String response = "";
 		try {
 			conn = con.getConnection();
-			String sql = "delete from empleado where empleado_id = ?;";
+			String sql = "delete from empleados where empleado_id = ?;";
 			ps = conn.prepareStatement(sql);
 			ps.setInt(1, id);
 
@@ -227,7 +227,7 @@ public class EmpleadosDaoServiceImplement implements EmpleadosDaoService {
 		Timestamp tp = new Timestamp(datetime);
 		try {
 			conn = con.getConnection();
-			String sql = "update empleado set activo = ?, fecha_baja = ? where empleado_id = ?;";
+			String sql = "update empleados set activo = ?, fecha_baja = ? where empleado_id = ?;";
 
 			ps = conn.prepareStatement(sql);
 			ps.setBoolean(1, false);

@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bcn.model.Empleados;
-import com.bcn.service.EmpleadosDaoServiceImplement;
+import com.bcn.service.DaoEmpleado.EmpleadoDaoServiceImplement;
 
 @RestController
 @RequestMapping(value = "/empleados")
 public class EmpleadosController {
 	@Autowired
-	EmpleadosDaoServiceImplement empleadosService;
+	EmpleadoDaoServiceImplement empleadosService;
 
 	@GetMapping("/getDatos")
 	public ResponseEntity<?> getDatos() throws Exception {

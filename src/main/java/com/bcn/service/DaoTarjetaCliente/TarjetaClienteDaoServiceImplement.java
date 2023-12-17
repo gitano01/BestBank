@@ -15,14 +15,14 @@ import org.springframework.stereotype.Service;
 import com.bcn.model.Cuentas;
 import com.bcn.model.InventarioTarjetas;
 import com.bcn.model.TarjetasClientes;
-import com.bcn.service.CuentasDaoServiceImplement;
+import com.bcn.service.DaoCuenta.CuentaDaoServiceImplement;
 import com.bcn.utils.DbConnect;
 
 @Service
-public class TarjetasClientesDaoServiceImplement implements TarjetasClientesDaoService {
+public class TarjetaClienteDaoServiceImplement implements TarjetaClienteDaoService {
 	@Autowired // Dependency injection
 	private DbConnect con;
-	private CuentasDaoServiceImplement cuentasService;
+	private CuentaDaoServiceImplement cuentasService;
 	Connection conn = null;
 	PreparedStatement ps = null;
 	ResultSet rs = null;
@@ -47,7 +47,7 @@ public class TarjetasClientesDaoServiceImplement implements TarjetasClientesDaoS
 		try {
 
 			conn = con.getConnection();
-			ps = conn.prepareStatement("select * from tarjeta_cliente");
+			ps = conn.prepareStatement("select * from tarjetas_clientes");
 
 			if ((rs = ps.executeQuery()).next()) {
 				do {
@@ -97,7 +97,7 @@ public class TarjetasClientesDaoServiceImplement implements TarjetasClientesDaoS
 		TarjetasClientes tarjeta = null;
 		try {
 			conn = con.getConnection();
-			ps = conn.prepareStatement("select * from tarjeta_cliente where tarjeta_cliente_id = " + id + ";");
+			ps = conn.prepareStatement("select * from tarjetas_clientes where tarjeta_cliente_id = " + id + ";");
 
 			if ((rs = ps.executeQuery()).next()) {
 				tarjeta = new TarjetasClientes();
@@ -141,7 +141,7 @@ public class TarjetasClientesDaoServiceImplement implements TarjetasClientesDaoS
 	public String assignTarjeta(TarjetasClientes tarjeta) throws Exception, SQLException {
 		String response = "";
 		Cuentas cuenta_cliente = null;
-		cuentasService = new CuentasDaoServiceImplement();
+		cuentasService = new CuentaDaoServiceImplement();
 		InventarioTarjetas tarjeta_inventario = null;
 		Long datetime = System.currentTimeMillis();
 		Timestamp tp = new Timestamp(datetime);
@@ -227,7 +227,7 @@ public class TarjetasClientesDaoServiceImplement implements TarjetasClientesDaoS
 					if (!tarjeta_cliente.isTarjetaCancelada()) {
 						if (!tarjeta_cliente.isBloqueoPermanente()) {
 							conn = con.getConnection();
-							String sql = "update tarjeta_cliente set bloqueo_permanente = true, bloqueo_temporal = false, tarjeta_activa = false, tarjeta_cancelada = true, fecha_bloqueo = ?, fecha_cancelacion = ?, fecha_modificacion = ?, estatus_tarjeta = 'bloqueado permanentemente' where numero_tarjeta = '"
+							String sql = "update tarjetas_clientes set bloqueo_permanente = true, bloqueo_temporal = false, tarjeta_activa = false, tarjeta_cancelada = true, fecha_bloqueo = ?, fecha_cancelacion = ?, fecha_modificacion = ?, estatus_tarjeta = 'bloqueado permanentemente' where numero_tarjeta = '"
 									+ tarjeta_cliente.getNumeroTarjeta() + "';";
 							ps = conn.prepareStatement(sql);
 							ps.setTimestamp(1, tp);
@@ -282,7 +282,7 @@ public class TarjetasClientesDaoServiceImplement implements TarjetasClientesDaoS
 						if (!tarjeta_cliente.isBloqueoPermanente()) {
 							if (!tarjeta_cliente.isBloqueoTemporal()) {
 								conn = con.getConnection();
-								String sql = "update tarjeta_cliente set bloqueo_temporal = true, fecha_bloqueo = ?, fecha_modificacion = ?, estatus_tarjeta = 'bloqueado temporalmente' where numero_tarjeta ='"
+								String sql = "update tarjetas_clientes set bloqueo_temporal = true, fecha_bloqueo = ?, fecha_modificacion = ?, estatus_tarjeta = 'bloqueado temporalmente' where numero_tarjeta ='"
 										+ tarjeta_cliente.getNumeroTarjeta() + "';";
 								ps = conn.prepareStatement(sql);
 								ps.setTimestamp(1, tp);
@@ -339,7 +339,7 @@ public class TarjetasClientesDaoServiceImplement implements TarjetasClientesDaoS
 						if (!tarjeta_cliente.isBloqueoPermanente()) {
 							if (tarjeta_cliente.isBloqueoTemporal()) {
 								conn = con.getConnection();
-								String sql = "update tarjeta_cliente set bloqueo_temporal = false, fecha_bloqueo = null, fecha_modificacion = ?, estatus_tarjeta = 'activa' where numero_tarjeta ='"
+								String sql = "update tarjetas_clientes set bloqueo_temporal = false, fecha_bloqueo = null, fecha_modificacion = ?, estatus_tarjeta = 'activa' where numero_tarjeta ='"
 										+ tarjeta_cliente.getNumeroTarjeta() + "';";
 								ps = conn.prepareStatement(sql);
 								ps.setTimestamp(1, tp);
@@ -385,7 +385,7 @@ public class TarjetasClientesDaoServiceImplement implements TarjetasClientesDaoS
 		String response = "";
 		TarjetasClientes tarjeta_cliente = null;
 		Cuentas cuenta_cliente = null;
-		cuentasService = new CuentasDaoServiceImplement();
+		cuentasService = new CuentaDaoServiceImplement();
 		InventarioTarjetas tarjeta_inventario = null;
 		int tarjeta_cliente_id = getTarjetaClienteIdByStatus(tarjeta.getNumeroTarjeta());
 		Long datetime = System.currentTimeMillis();
@@ -470,7 +470,7 @@ public class TarjetasClientesDaoServiceImplement implements TarjetasClientesDaoS
 			if (tarjeta_cliente != null) {
 				if (!tarjeta_cliente.isTarjetaCancelada()) {
 					conn = con.getConnection();
-					String sql = "update tarjeta_cliente set tarjeta_cancelada = true, tarjeta_activa = false, fecha_cancelacion = ?, fecha_modificacion = ?, estatus_tarjeta = 'cancelada' where numero_tarjeta ='"
+					String sql = "update tarjetas_clientes set tarjeta_cancelada = true, tarjeta_activa = false, fecha_cancelacion = ?, fecha_modificacion = ?, estatus_tarjeta = 'cancelada' where numero_tarjeta ='"
 							+ tarjeta_cliente.getNumeroTarjeta() + "';";
 					ps = conn.prepareStatement(sql);
 					ps.setTimestamp(1, tp);
@@ -504,7 +504,7 @@ public class TarjetasClientesDaoServiceImplement implements TarjetasClientesDaoS
 		String response = "";
 		try {
 			conn = con.getConnection();
-			ps = conn.prepareStatement("delete from tarjeta_cliente where numero_tarjeta = '"
+			ps = conn.prepareStatement("delete from tarjetas_clientes where numero_tarjeta = '"
 					+ tarjeta.getNumeroTarjeta() + "' and tarjeta_activa = false;");
 
 			if (ps.executeUpdate() == 1) {
@@ -600,7 +600,7 @@ public class TarjetasClientesDaoServiceImplement implements TarjetasClientesDaoS
 		try {
 			conn = con.getConnection();
 			ps = conn.prepareStatement(
-					"select tarjeta_cliente_id, numero_tarjeta, nip, tarjeta_activa, balance, bloqueo_permanente, bloqueo_temporal, tarjeta_cancelada, tarjeta_migrada from tarjeta_cliente where numero_tarjeta = ?");
+					"select tarjeta_cliente_id, numero_tarjeta, nip, tarjeta_activa, balance, bloqueo_permanente, bloqueo_temporal, tarjeta_cancelada, tarjeta_migrada from tarjetas_clientes where numero_tarjeta = ?");
 
 			ps.setString(1, numero_tarjeta);
 
@@ -632,7 +632,7 @@ public class TarjetasClientesDaoServiceImplement implements TarjetasClientesDaoS
 		int tarjeta_cliente_id;
 		try {
 			conn = con.getConnection();
-			ps = conn.prepareStatement("select tarjeta_cliente_id from tarjeta_cliente where numero_tarjeta = '"
+			ps = conn.prepareStatement("select tarjeta_cliente_id from tarjetas_clientes where numero_tarjeta = '"
 					+ numero_tarjeta + "' and tarjeta_migrada = false and tarjeta_activa = true;");
 			System.out.println("EJECUTANDO SQL PARA OBTENER ESTATUS VALIDO PARA MIGRAR TARJETA: " + ps.toString());
 			if ((rs = (ps.executeQuery())).next()) {
@@ -663,13 +663,13 @@ public class TarjetasClientesDaoServiceImplement implements TarjetasClientesDaoS
 				if (!tarjeta_cliente.isTarjetaMigrada()) {
 					if (!tarjeta_cliente.isTarjetaActiva() && !tarjeta_cliente.isTarjetaCancelada()) {
 						if (tarjeta_cliente.getNip() != null) {
-							String sql = "update tarjeta_cliente set tarjeta_activa = true, fecha_activacion = ?, estatus_tarjeta = 'activa', fecha_modificacion = ? where numero_tarjeta ='"
+							String sql = "update tarjetas_clientes set tarjeta_activa = true, fecha_activacion = ?, estatus_tarjeta = 'activa', fecha_modificacion = ? where numero_tarjeta ='"
 									+ tarjeta.getNumeroTarjeta() + "';";
 							ps = conn.prepareStatement(sql);
 							ps.setTimestamp(1, tp);
 							ps.setTimestamp(2, tp);
 						} else {
-							String sql = "update tarjeta_cliente set tarjeta_activa = true, nip = ?, fecha_activacion = ?, estatus_tarjeta = 'activa', fecha_modificacion = ? where numero_tarjeta ='"
+							String sql = "update tarjetas_clientes set tarjeta_activa = true, nip = ?, fecha_activacion = ?, estatus_tarjeta = 'activa', fecha_modificacion = ? where numero_tarjeta ='"
 									+ tarjeta.getNumeroTarjeta() + "';";
 							ps = conn.prepareStatement(sql);
 							ps.setString(1, tarjeta.getNip());
@@ -739,7 +739,7 @@ public class TarjetasClientesDaoServiceImplement implements TarjetasClientesDaoS
 		try {
 			conn = con.getConnection();
 			ps = conn.prepareStatement(
-					"update tarjeta_cliente set tarjeta_migrada = true, tarjeta_activa = false, estatus_tarjeta = 'migrada', fecha_modificacion = ?, fecha_migrado = ? where numero_tarjeta = '"
+					"update tarjetas_clientes set tarjeta_migrada = true, tarjeta_activa = false, estatus_tarjeta = 'migrada', fecha_modificacion = ?, fecha_migrado = ? where numero_tarjeta = '"
 							+ numero_tarjeta + "';");
 			ps.setTimestamp(1, tp);
 			ps.setTimestamp(2, tp);

@@ -1,11 +1,11 @@
-package com.bcn.service;
+package com.bcn.service.DaoCuenta;
 
 import java.sql.SQLException;
 import java.util.List;
 
 import com.bcn.model.Cuentas;
 
-public interface CuentasDaoService {
+public interface CuentaDaoService {
 
 	public List<Cuentas> getCuentas() throws Exception, SQLException;
 

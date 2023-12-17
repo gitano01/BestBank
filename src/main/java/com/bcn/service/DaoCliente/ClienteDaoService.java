@@ -1,11 +1,11 @@
-package com.bcn.service;
+package com.bcn.service.DaoCliente;
 
 import java.sql.SQLException;
 import java.util.List;
 
 import com.bcn.model.Clientes;
 
-public interface ClientesDaoService {
+public interface ClienteDaoService {
 	public List<Clientes> getClientes() throws Exception, SQLException;
 
 	public List<List<?>> getDatos() throws Exception;

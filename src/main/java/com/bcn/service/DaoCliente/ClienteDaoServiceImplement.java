@@ -1,4 +1,4 @@
-package com.bcn.service;
+package com.bcn.service.DaoCliente;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,7 +15,7 @@ import com.bcn.model.Clientes;
 import com.bcn.utils.DbConnect;
 
 @Service
-public class ClientesDaoServiceImplement implements ClientesDaoService {
+public class ClienteDaoServiceImplement implements ClienteDaoService {
 
 	@Autowired
 	private DbConnect con;
@@ -42,7 +42,7 @@ public class ClientesDaoServiceImplement implements ClientesDaoService {
 		Clientes cliente = null;
 		try {
 			conn = con.getConnection();
-			ps = conn.prepareStatement("select * from cliente");
+			ps = conn.prepareStatement("select * from clientes");
 
 			if ((rs = ps.executeQuery()).next()) {
 				do {
@@ -84,7 +84,7 @@ public class ClientesDaoServiceImplement implements ClientesDaoService {
 
 		try {
 			conn = con.getConnection();
-			ps = conn.prepareStatement("select * from cliente where cliente_id = ?");
+			ps = conn.prepareStatement("select * from clientes where cliente_id = ?");
 			ps.setInt(1, id);
 
 			if ((rs = ps.executeQuery()).next()) {
@@ -124,7 +124,7 @@ public class ClientesDaoServiceImplement implements ClientesDaoService {
 		String response = "";
 		try {
 			conn = con.getConnection();
-			String sql = "insert into cliente(nombre, apellido_paterno, apellido_materno, direccion, telefono, colonia, codigo_postal, ciudad, estado, email, estatus, activo, sucursal_id, empleado_id, fecha_alta)"
+			String sql = "insert into clientes(nombre, apellido_paterno, apellido_materno, direccion, telefono, colonia, codigo_postal, ciudad, estado, email, estatus, activo, sucursal_id, empleado_id, fecha_alta)"
 					+ "values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
 			System.out.println("DATOS A INGRESAR: " + sql);
 			ps = conn.prepareStatement(sql);
@@ -168,7 +168,7 @@ public class ClientesDaoServiceImplement implements ClientesDaoService {
 		String response = "";
 		try {
 			conn = con.getConnection();
-			String sql = "update cliente set nombre = ?, apellido_paterno = ?, apellido_materno = ?, direccion = ?, telefono = ?, colonia = ?, codigo_postal = ?, ciudad = ?, estado = ?, email = ?, estatus = ?, activo = ?, empleado_id = ?, sucursal_id = ?"
+			String sql = "update clientes set nombre = ?, apellido_paterno = ?, apellido_materno = ?, direccion = ?, telefono = ?, colonia = ?, codigo_postal = ?, ciudad = ?, estado = ?, email = ?, estatus = ?, activo = ?, empleado_id = ?, sucursal_id = ?"
 					+ " where cliente_id = " + id + ";";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, cliente.getNombre());
@@ -206,7 +206,7 @@ public class ClientesDaoServiceImplement implements ClientesDaoService {
 		String response = "";
 		try {
 			conn = con.getConnection();
-			String sql = "update cliente set estatus = ?, activo = ?, fecha_baja = ?" + " where cliente_id = " + id
+			String sql = "update clientes set estatus = ?, activo = ?, fecha_baja = ?" + " where cliente_id = " + id
 					+ ";";
 			ps = conn.prepareStatement(sql);
 			Long datetime = System.currentTimeMillis();
@@ -236,7 +236,7 @@ public class ClientesDaoServiceImplement implements ClientesDaoService {
 		String response = "";
 		try {
 			conn = con.getConnection();
-			String sql = "delete from cliente where cliente_id = ?";
+			String sql = "delete from clientes where cliente_id = ?";
 			ps = conn.prepareStatement(sql);
 			ps.setInt(1, id);
 			System.out.println("TRADUCCION SQL ES: " + ps.toString());
