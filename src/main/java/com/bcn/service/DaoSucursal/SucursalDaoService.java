@@ -1,11 +1,11 @@
-package com.bcn.service;
+package com.bcn.service.DaoSucursal;
 
 import java.sql.SQLException;
 import java.util.List;
 
 import com.bcn.model.Sucursales;
 
-public interface SucursalesDaoService {
+public interface SucursalDaoService {
 	public List<List<?>> getDatos() throws Exception, SQLException;
 
 	public List<Sucursales> getSucursales() throws Exception, SQLException;

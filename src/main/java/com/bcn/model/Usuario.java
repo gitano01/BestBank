@@ -7,7 +7,7 @@ public class Usuario {
     private String email;
     private boolean activo;
     private int rol_id;
-    private int permiso_id;
+    private int permiso_id; 
     private int empleado_id;
     private String fecha_alta;
     private String fecha_baja;

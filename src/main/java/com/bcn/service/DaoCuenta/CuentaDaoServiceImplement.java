@@ -1,4 +1,4 @@
-package com.bcn.service;
+package com.bcn.service.DaoCuenta;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,10 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bcn.model.Cuentas;
+import com.bcn.model.TarjetasClientes;
 import com.bcn.utils.DbConnect;
 
 @Service
-public class CuentasDaoServiceImplement implements CuentasDaoService {
+public class CuentaDaoServiceImplement implements CuentaDaoService {
 	@Autowired
 	private DbConnect con;
 
@@ -29,7 +30,7 @@ public class CuentasDaoServiceImplement implements CuentasDaoService {
 		Cuentas cuenta = null;
 		try {
 			conn = con.getConnection();
-			ps = conn.prepareStatement("select * from cuenta;");
+			ps = conn.prepareStatement("select * from cuentas;");
 
 			if ((rs = ps.executeQuery()).next()) {
 				do {
@@ -81,7 +82,7 @@ public class CuentasDaoServiceImplement implements CuentasDaoService {
 		Cuentas cuenta = null;
 		try {
 			conn = con.getConnection();
-			ps = conn.prepareStatement("select * from cuenta where cuenta_id = " + id + ";");
+			ps = conn.prepareStatement("select * from cuentas where cuenta_id = " + id + ";");
 
 			if ((rs = ps.executeQuery()).next()) {
 				cuenta = new Cuentas();
@@ -130,7 +131,7 @@ public class CuentasDaoServiceImplement implements CuentasDaoService {
 //			System.out.println(numCta);
 //			System.out.println(clabe);
 			conn = con.getConnection();
-			String sql = "insert into cuenta(fecha_apertura, numero_cuenta, clabe, saldo_anterior, saldo_inicial, saldo_maximo, balance, tipo_cuenta, estatus_cuenta, activo, cliente_id)"
+			String sql = "insert into cuentas(fecha_apertura, numero_cuenta, clabe, saldo_anterior, saldo_inicial, saldo_maximo, balance, tipo_cuenta, estatus_cuenta, activo, cliente_id)"
 					+ "values(?,?,?,?,?,?,?,?,?,?,?);";
 
 			ps = conn.prepareStatement(sql);
@@ -167,7 +168,7 @@ public class CuentasDaoServiceImplement implements CuentasDaoService {
 
 		try {
 			conn = con.getConnection();
-			String sql = "update cuenta set activo = ?, estatus_cuenta = ?, saldo_maximo = ? where cuenta_id = " + id
+			String sql = "update cuentas set activo = ?, estatus_cuenta = ?, saldo_maximo = ? where cuenta_id = " + id
 					+ ";";
 			ps = conn.prepareStatement(sql);
 			ps.setBoolean(1, cuenta.isActivo());
@@ -197,7 +198,7 @@ public class CuentasDaoServiceImplement implements CuentasDaoService {
 		try {
 			conn = con.getConnection();
 			ps = conn.prepareStatement(
-					"update cuenta set activo = false, estatus_cuenta = 'cerrado', fecha_cierre = ? where cuenta_id = "
+					"update cuentas set activo = false, estatus_cuenta = 'cerrado', fecha_cierre = ? where cuenta_id = "
 							+ id + ";");
 
 			ps.setTimestamp(1, tp);
@@ -223,7 +224,7 @@ public class CuentasDaoServiceImplement implements CuentasDaoService {
 		String response = "";
 		try {
 			conn = con.getConnection();
-			ps = conn.prepareStatement("delete from cuenta where cuenta_id = " + id + ";");
+			ps = conn.prepareStatement("delete from cuentas where cuenta_id = " + id + ";");
 
 			if (ps.executeUpdate() == 1) {
 				System.out.println("Cuenta eliminada");
@@ -238,5 +239,35 @@ public class CuentasDaoServiceImplement implements CuentasDaoService {
 			con.closeConnection(conn, ps);
 		}
 		return response;
+	}
+
+	// Common Methods
+	public Cuentas getCuentaCliente(DbConnect con, TarjetasClientes tarjeta_cliente) throws Exception, SQLException {
+		Cuentas cuenta = null;
+		try {
+			conn = con.getConnection();
+			ps = conn.prepareStatement(
+					"select cuenta_id, saldo_inicial, saldo_maximo, balance, cliente_id from cuentas where cuenta_id = "
+							+ tarjeta_cliente.getCuentaId() + " and cliente_id = " + tarjeta_cliente.getClienteId()
+							+ ";");
+
+			if ((rs = ps.executeQuery()).next()) {
+				cuenta = new Cuentas();
+				cuenta.setCuentaId(rs.getInt("cuenta_id"));
+				cuenta.setSaldoInicial(rs.getDouble("saldo_inicial"));
+				cuenta.setSaldoMaximo(rs.getDouble("saldo_maximo"));
+				cuenta.setBalance(rs.getDouble("balance"));
+				cuenta.setClienteId(rs.getInt("cliente_id"));
+
+			} else {
+				System.out.println("No se encontró información de la cuenta");
+				cuenta = null;
+			}
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		} finally {
+			con.closeConnection(conn, ps, rs);
+		}
+		return cuenta;
 	}
 }
