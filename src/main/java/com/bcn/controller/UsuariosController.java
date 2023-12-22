@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bcn.model.Usuario;
@@ -76,6 +77,34 @@ public class UsuariosController {
 
       throw new Exception(e.getMessage());
     }
+    
+  }
+
+
+
+    // Obtener el usuario por Id
+  @GetMapping("/getUsuario/")
+  public ResponseEntity<?> getUsuarioByName(@RequestParam(required = true) String usuario) throws Exception {
+    
+    return new ResponseEntity<String> ("Hola " + usuario, HttpStatus.OK);
+    //Usuario usr;
+  //   if(!utils.isnumeric(id)){ 
+  //       apiResponse = new ApiErrorResponse(Constantes.Codigo.BAD_REQUEST, Constantes.Mensaje.MSG_FAILED,"El parámetro id debe ser un dato numerico");
+  //       return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.BAD_REQUEST);
+  //     }
+  //  try {      
+  //     usr = userService.getUsuario(Integer.parseInt(id));
+  //     if (usr != null) {
+  //       apiResponse = new ApiSuccessResponse(Constantes.Codigo.OK, Constantes.Mensaje.MSG_SUCCESS, usr);
+  //     return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.OK);
+  //   } else {
+  //     apiResponse = new ApiErrorResponse(Constantes.Codigo.NOT_FOUND, Constantes.Mensaje.MSG_FAILED,"No existen usuarios registrados");
+  //     return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.NOT_FOUND);
+  //   }
+  //   } catch (Exception e) {
+
+  //     throw new Exception(e.getMessage());
+  //   }
     
   }
 
@@ -177,5 +206,7 @@ public class UsuariosController {
       return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.NOT_FOUND);
     }
   }
+
+
 
 }
