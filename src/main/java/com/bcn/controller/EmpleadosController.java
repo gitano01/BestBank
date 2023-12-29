@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bcn.model.Empleados;
+import com.bcn.model.Empleado;
 import com.bcn.service.DaoEmpleado.EmpleadoDaoServiceImplement;
 
 @RestController
@@ -42,9 +42,9 @@ public class EmpleadosController {
 
 	@GetMapping("/getEmpleados")
 	public ResponseEntity<?> getListaEmpleados() throws Exception {
-		List<Empleados> empleados = null;
+		List<Empleado> empleados = null;
 		try {
-			empleados = new ArrayList<Empleados>();
+			empleados = new ArrayList<Empleado>();
 			empleados = empleadosService.getEmpleados();
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
@@ -53,14 +53,14 @@ public class EmpleadosController {
 		if (empleados == null) {
 			return new ResponseEntity<String>("No se hallaron registros", HttpStatus.NOT_FOUND);
 		} else {
-			return new ResponseEntity<List<Empleados>>(empleados, HttpStatus.OK);
+			return new ResponseEntity<List<Empleado>>(empleados, HttpStatus.OK);
 		}
 	}
 
 	@GetMapping("/getEmpleado/{empleadoId}")
 	public ResponseEntity<?> getEmpleado(@PathVariable String empleadoId) throws Exception {
 		int id = Integer.parseInt(empleadoId);
-		Empleados empleado = null;
+		Empleado empleado = null;
 		try {
 			empleado = empleadosService.getEmpleado(id);
 		} catch (Exception e) {
@@ -70,12 +70,12 @@ public class EmpleadosController {
 		if (empleado == null) {
 			return new ResponseEntity<String>("No se hallaron registros", HttpStatus.NOT_FOUND);
 		} else {
-			return new ResponseEntity<Empleados>(empleado, HttpStatus.OK);
+			return new ResponseEntity<Empleado>(empleado, HttpStatus.OK);
 		}
 	}
 
 	@PostMapping("/addEmpleado")
-	public ResponseEntity<?> addEmpleado(@RequestBody Empleados empleado) throws Exception {
+	public ResponseEntity<?> addEmpleado(@RequestBody Empleado empleado) throws Exception {
 		String response = "";
 		try {
 			response = empleadosService.crearEmpleado(empleado);
@@ -91,7 +91,7 @@ public class EmpleadosController {
 	}
 
 	@PutMapping("/updateEmpleado/{empleadoId}")
-	public ResponseEntity<?> updateEmpleado(@RequestBody Empleados empleado, @PathVariable String empleadoId)
+	public ResponseEntity<?> updateEmpleado(@RequestBody Empleado empleado, @PathVariable String empleadoId)
 			throws Exception {
 		int id = Integer.parseInt(empleadoId);
 		String response = "";
@@ -109,7 +109,7 @@ public class EmpleadosController {
 	}
 
 	@PutMapping("/dropEmpleado/{empleadoId}")
-	public ResponseEntity<?> dropEmpleado(@RequestBody Empleados empleado, @PathVariable String empleadoId)
+	public ResponseEntity<?> dropEmpleado(@RequestBody Empleado empleado, @PathVariable String empleadoId)
 			throws Exception {
 		int id = Integer.parseInt(empleadoId);
 		String response = "";
@@ -127,7 +127,7 @@ public class EmpleadosController {
 	}
 
 	@DeleteMapping("/deleteEmpleado/{empleadoId}")
-	public ResponseEntity<?> deleteEmpleado(@RequestBody Empleados empleado, @PathVariable String empleadoId)
+	public ResponseEntity<?> deleteEmpleado(@RequestBody Empleado empleado, @PathVariable String empleadoId)
 			throws Exception {
 		int id = Integer.parseInt(empleadoId);
 		String response = "";

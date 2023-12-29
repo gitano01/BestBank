@@ -2,7 +2,7 @@ package com.bcn.model;
 
 import java.sql.Timestamp;
 
-public class Cuentas {
+public class Cuenta {
 	private int cuentaId;
 	private Timestamp fechaApertura;
 	private Timestamp fechaCierre;
