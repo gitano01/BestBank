@@ -12,6 +12,15 @@ public class Sucursal {
 	private String estado;
 	private Timestamp fechaApertura;
 	private Timestamp fechaCierre;
+	private int PlazaId;
+
+	public int getPlazaId() {
+		return PlazaId;
+	}
+
+	public void setPlazaId(int PlazaId) {
+		this.PlazaId = PlazaId;
+	}
 
 	public int getSucursalId() {
 		return sucursalId;

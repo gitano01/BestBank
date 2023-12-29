@@ -56,7 +56,7 @@ public class SucursalDaoServiceImplement implements SucursalDaoService {
 					sucursal.setEstado(rs.getString("estado"));
 					sucursal.setFechaApertura(rs.getTimestamp("fecha_apertura"));
 					sucursal.setFechaCierre(rs.getTimestamp("fecha_cierre"));
-
+					sucursal.setPlazaId(rs.getInt("plaza_id"));
 					listaSucursales.add(sucursal);
 				} while (rs.next());
 			} else {
@@ -92,6 +92,7 @@ public class SucursalDaoServiceImplement implements SucursalDaoService {
 				sucursal.setEstado(rs.getString("estado"));
 				sucursal.setFechaApertura(rs.getTimestamp("fecha_apertura"));
 				sucursal.setFechaCierre(rs.getTimestamp("fecha_cierre"));
+				sucursal.setPlazaId(rs.getInt("plaza_id"));
 
 			} else {
 				System.out.println("No existen registros");
@@ -123,6 +124,7 @@ public class SucursalDaoServiceImplement implements SucursalDaoService {
 			ps.setString(4, sucursal.getTelefono());
 			ps.setString(5, sucursal.getCiudad());
 			ps.setString(6, sucursal.getEstado());
+			ps.setInt(7, sucursal.getPlazaId());
 			ps.setTimestamp(7, tp);
 
 			if (ps.executeUpdate() == 1) {
@@ -157,7 +159,7 @@ public class SucursalDaoServiceImplement implements SucursalDaoService {
 			ps.setString(4, sucursal.getDireccion());
 			ps.setString(5, sucursal.getCiudad());
 			ps.setString(6, sucursal.getEstado());
-
+			ps.setInt(7, sucursal.getPlazaId());
 			if (ps.executeUpdate() == 1) {
 				System.out.println("Sucursal actualizada");
 				response = "OK";
