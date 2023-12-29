@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bcn.model.Cuentas;
+import com.bcn.model.Cuenta;
 import com.bcn.service.DaoCuenta.CuentaDaoServiceImplement;
 
 @RestController
@@ -26,9 +26,9 @@ public class CuentasController {
 
 	@GetMapping("/getCuentas")
 	public ResponseEntity<?> getCuentas() throws Exception {
-		List<Cuentas> cuentas = null;
+		List<Cuenta> cuentas = null;
 		try {
-			cuentas = new ArrayList<Cuentas>();
+			cuentas = new ArrayList<Cuenta>();
 			cuentas = cuentasService.getCuentas();
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
@@ -37,7 +37,7 @@ public class CuentasController {
 		if (cuentas == null) {
 			return new ResponseEntity<String>("No se hallaron registros", HttpStatus.NOT_FOUND);
 		} else {
-			return new ResponseEntity<List<Cuentas>>(cuentas, HttpStatus.OK);
+			return new ResponseEntity<List<Cuenta>>(cuentas, HttpStatus.OK);
 		}
 	}
 
@@ -60,7 +60,7 @@ public class CuentasController {
 	@GetMapping("/getCuenta/{cuentaId}")
 	public ResponseEntity<?> getCuenta(@PathVariable String cuentaId) throws Exception {
 		int id = Integer.parseInt(cuentaId);
-		Cuentas cuenta = null;
+		Cuenta cuenta = null;
 		try {
 			cuenta = cuentasService.getCuenta(id);
 		} catch (Exception e) {
@@ -70,12 +70,12 @@ public class CuentasController {
 		if (cuenta == null) {
 			return new ResponseEntity<String>("No se encontraron registros", HttpStatus.NOT_FOUND);
 		} else {
-			return new ResponseEntity<Cuentas>(cuenta, HttpStatus.OK);
+			return new ResponseEntity<Cuenta>(cuenta, HttpStatus.OK);
 		}
 	}
 
 	@PostMapping("/addCuenta")
-	public ResponseEntity<?> addCuenta(@RequestBody Cuentas cuenta) throws Exception {
+	public ResponseEntity<?> addCuenta(@RequestBody Cuenta cuenta) throws Exception {
 		String response = "";
 		try {
 			response = cuentasService.crearCuenta(cuenta);
@@ -91,7 +91,7 @@ public class CuentasController {
 	}
 
 	@PutMapping("/updateCuenta/{cuentaId}")
-	public ResponseEntity<?> updateCuenta(@RequestBody Cuentas cuenta, @PathVariable String cuentaId) throws Exception {
+	public ResponseEntity<?> updateCuenta(@RequestBody Cuenta cuenta, @PathVariable String cuentaId) throws Exception {
 		String response = "";
 		int id = Integer.parseInt(cuentaId);
 		try {

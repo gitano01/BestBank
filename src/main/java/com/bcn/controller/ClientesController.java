@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bcn.model.Clientes;
+import com.bcn.model.Cliente;
 import com.bcn.service.DaoCliente.ClienteDaoServiceImplement;
 
 @RestController
@@ -42,9 +42,9 @@ public class ClientesController {
 
 	@GetMapping("/getClientes")
 	public ResponseEntity<?> getListaClientes() throws Exception {
-		List<Clientes> cliente = null;
+		List<Cliente> cliente = null;
 		try {
-			cliente = new ArrayList<Clientes>();
+			cliente = new ArrayList<Cliente>();
 			cliente = clientesService.getClientes();
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
@@ -53,7 +53,7 @@ public class ClientesController {
 		if (cliente == null) {
 			return new ResponseEntity<String>("No se hallaron registros", HttpStatus.NOT_FOUND);
 		} else {
-			return new ResponseEntity<List<Clientes>>(cliente, HttpStatus.OK);
+			return new ResponseEntity<List<Cliente>>(cliente, HttpStatus.OK);
 		}
 	}
 
@@ -61,7 +61,7 @@ public class ClientesController {
 	public ResponseEntity<?> getCliente(@PathVariable String clienteId) throws Exception {
 		int id = Integer.parseInt(clienteId);
 
-		Clientes cliente = null;
+		Cliente cliente = null;
 		try {
 			cliente = clientesService.getCliente(id);
 
@@ -72,12 +72,12 @@ public class ClientesController {
 		if (cliente == null) {
 			return new ResponseEntity<String>("No se hallaron registros", HttpStatus.NOT_FOUND);
 		} else {
-			return new ResponseEntity<Clientes>(cliente, HttpStatus.OK);
+			return new ResponseEntity<Cliente>(cliente, HttpStatus.OK);
 		}
 	}
 
 	@PostMapping(value = "/addCliente")
-	public ResponseEntity<?> addCliente(@RequestBody Clientes cliente) throws Exception {
+	public ResponseEntity<?> addCliente(@RequestBody Cliente cliente) throws Exception {
 		String response = "";
 		try {
 			response = clientesService.crearCliente(cliente);
@@ -93,7 +93,7 @@ public class ClientesController {
 	}
 
 	@PutMapping(value = "/updateCliente/{clienteId}")
-	public ResponseEntity<?> updateCliente(@RequestBody Clientes cliente, @PathVariable String clienteId)
+	public ResponseEntity<?> updateCliente(@RequestBody Cliente cliente, @PathVariable String clienteId)
 			throws Exception {
 		int id = Integer.parseInt(clienteId);
 		String response = "";
@@ -111,7 +111,7 @@ public class ClientesController {
 	}
 
 	@PutMapping(value = "/dropCliente/{clienteId}")
-	public ResponseEntity<?> dropCliente(@RequestBody Clientes cliente, @PathVariable String clienteId)
+	public ResponseEntity<?> dropCliente(@RequestBody Cliente cliente, @PathVariable String clienteId)
 			throws Exception {
 		int id = Integer.parseInt(clienteId);
 		String response = "";

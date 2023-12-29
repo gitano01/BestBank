@@ -11,7 +11,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bcn.model.Empleados;
+import com.bcn.model.Empleado;
 import com.bcn.utils.DbConnect;
 
 @Service
@@ -24,16 +24,16 @@ public class EmpleadoDaoServiceImplement implements EmpleadoDaoService {
 	ResultSet rs = null;
 
 	@Override
-	public List<Empleados> getEmpleados() throws Exception, SQLException {
-		List<Empleados> listaEmpleados = new ArrayList<Empleados>();
-		Empleados empleado = null;
+	public List<Empleado> getEmpleados() throws Exception, SQLException {
+		List<Empleado> listaEmpleados = new ArrayList<Empleado>();
+		Empleado empleado = null;
 		try {
 			conn = con.getConnection();
 			ps = conn.prepareStatement("select * from empleados");
 
 			if ((rs = ps.executeQuery()).next()) {
 				do {
-					empleado = new Empleados();
+					empleado = new Empleado();
 					empleado.setEmpleadoId(rs.getInt("empleado_id"));
 					empleado.setNombre(rs.getString("nombre"));
 					empleado.setApellidoPaterno(rs.getString("apellido_paterno"));
@@ -68,7 +68,7 @@ public class EmpleadoDaoServiceImplement implements EmpleadoDaoService {
 	@Override
 	public List<List<?>> getDatos() throws Exception, SQLException {
 		List<List<?>> datos = new ArrayList<List<?>>();
-		List<Empleados> listaEmpleados = getEmpleados();
+		List<Empleado> listaEmpleados = getEmpleados();
 		try {
 			datos.add(listaEmpleados);
 		} catch (Exception e) {
@@ -79,15 +79,15 @@ public class EmpleadoDaoServiceImplement implements EmpleadoDaoService {
 	}
 
 	@Override
-	public Empleados getEmpleado(int id) throws Exception, SQLException {
-		Empleados empleado = null;
+	public Empleado getEmpleado(int id) throws Exception, SQLException {
+		Empleado empleado = null;
 		try {
 			conn = con.getConnection();
 			ps = conn.prepareStatement("select * from empleados where empleado_id = ?");
 			ps.setInt(1, id);
 
 			if ((rs = ps.executeQuery()).next()) {
-				empleado = new Empleados();
+				empleado = new Empleado();
 				empleado.setEmpleadoId(rs.getInt("empleado_id"));
 				empleado.setNombre(rs.getString("nombre"));
 				empleado.setApellidoPaterno(rs.getString("apellido_paterno"));
@@ -118,7 +118,7 @@ public class EmpleadoDaoServiceImplement implements EmpleadoDaoService {
 	}
 
 	@Override
-	public String crearEmpleado(Empleados empleado) throws Exception, SQLException {
+	public String crearEmpleado(Empleado empleado) throws Exception, SQLException {
 		String response = "";
 		Long datetime = System.currentTimeMillis();
 		Timestamp tp = new Timestamp(datetime);
@@ -158,7 +158,7 @@ public class EmpleadoDaoServiceImplement implements EmpleadoDaoService {
 	}
 
 	@Override
-	public String updateEmpleado(Empleados empleado, int id) throws Exception, SQLException {
+	public String updateEmpleado(Empleado empleado, int id) throws Exception, SQLException {
 		String response = "";
 		try {
 			conn = con.getConnection();
@@ -196,7 +196,7 @@ public class EmpleadoDaoServiceImplement implements EmpleadoDaoService {
 	}
 
 	@Override
-	public String deleteEmpleado(Empleados empleado, int id) throws Exception, SQLException {
+	public String deleteEmpleado(Empleado empleado, int id) throws Exception, SQLException {
 		String response = "";
 		try {
 			conn = con.getConnection();
@@ -221,7 +221,7 @@ public class EmpleadoDaoServiceImplement implements EmpleadoDaoService {
 	}
 
 	@Override
-	public String dropEmpleado(Empleados empleado, int id) throws Exception, SQLException {
+	public String dropEmpleado(Empleado empleado, int id) throws Exception, SQLException {
 		String response = "";
 		Long datetime = System.currentTimeMillis();
 		Timestamp tp = new Timestamp(datetime);

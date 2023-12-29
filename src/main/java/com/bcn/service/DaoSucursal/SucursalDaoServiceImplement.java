@@ -11,7 +11,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bcn.model.Sucursales;
+import com.bcn.model.Sucursal;
 import com.bcn.utils.DbConnect;
 
 @Service
@@ -25,7 +25,7 @@ public class SucursalDaoServiceImplement implements SucursalDaoService {
 	@Override
 	public List<List<?>> getDatos() throws Exception, SQLException {
 		List<List<?>> datos = new ArrayList<List<?>>();
-		List<Sucursales> sucursales = getSucursales();
+		List<Sucursal> sucursales = getSucursales();
 		try {
 			datos.add(sucursales);
 		} catch (Exception e) {
@@ -36,16 +36,16 @@ public class SucursalDaoServiceImplement implements SucursalDaoService {
 	}
 
 	@Override
-	public List<Sucursales> getSucursales() throws Exception, SQLException {
-		List<Sucursales> listaSucursales = new ArrayList<Sucursales>();
-		Sucursales sucursal = null;
+	public List<Sucursal> getSucursales() throws Exception, SQLException {
+		List<Sucursal> listaSucursales = new ArrayList<Sucursal>();
+		Sucursal sucursal = null;
 		try {
 			conn = con.getConnection();
 			ps = conn.prepareStatement("select * from sucursales;");
 
 			if ((rs = ps.executeQuery()).next()) {
 				do {
-					sucursal = new Sucursales();
+					sucursal = new Sucursal();
 
 					sucursal.setSucursalId(rs.getInt("sucursal_id"));
 					sucursal.setNombreSucursal(rs.getString("nombre"));
@@ -56,7 +56,7 @@ public class SucursalDaoServiceImplement implements SucursalDaoService {
 					sucursal.setEstado(rs.getString("estado"));
 					sucursal.setFechaApertura(rs.getTimestamp("fecha_apertura"));
 					sucursal.setFechaCierre(rs.getTimestamp("fecha_cierre"));
-
+					sucursal.setPlazaId(rs.getInt("plaza_id"));
 					listaSucursales.add(sucursal);
 				} while (rs.next());
 			} else {
@@ -73,15 +73,15 @@ public class SucursalDaoServiceImplement implements SucursalDaoService {
 	}
 
 	@Override
-	public Sucursales getSucursal(int id) throws Exception, SQLException {
-		Sucursales sucursal = null;
+	public Sucursal getSucursal(int id) throws Exception, SQLException {
+		Sucursal sucursal = null;
 		try {
 			conn = con.getConnection();
 			ps = conn.prepareStatement("select * from sucursales where sucursal_id = ?;");
 			ps.setInt(1, id);
 
 			if ((rs = ps.executeQuery()).next()) {
-				sucursal = new Sucursales();
+				sucursal = new Sucursal();
 
 				sucursal.setSucursalId(rs.getInt("sucursal_id"));
 				sucursal.setNombreSucursal(rs.getString("nombre"));
@@ -92,6 +92,7 @@ public class SucursalDaoServiceImplement implements SucursalDaoService {
 				sucursal.setEstado(rs.getString("estado"));
 				sucursal.setFechaApertura(rs.getTimestamp("fecha_apertura"));
 				sucursal.setFechaCierre(rs.getTimestamp("fecha_cierre"));
+				sucursal.setPlazaId(rs.getInt("plaza_id"));
 
 			} else {
 				System.out.println("No existen registros");
@@ -106,7 +107,7 @@ public class SucursalDaoServiceImplement implements SucursalDaoService {
 	}
 
 	@Override
-	public String crearSucursal(Sucursales sucursal) throws Exception, SQLException {
+	public String crearSucursal(Sucursal sucursal) throws Exception, SQLException {
 		String response = "";
 
 		try {
@@ -123,6 +124,7 @@ public class SucursalDaoServiceImplement implements SucursalDaoService {
 			ps.setString(4, sucursal.getTelefono());
 			ps.setString(5, sucursal.getCiudad());
 			ps.setString(6, sucursal.getEstado());
+			ps.setInt(7, sucursal.getPlazaId());
 			ps.setTimestamp(7, tp);
 
 			if (ps.executeUpdate() == 1) {
@@ -142,7 +144,7 @@ public class SucursalDaoServiceImplement implements SucursalDaoService {
 	}
 
 	@Override
-	public String updateSucursal(Sucursales sucursal, int id) throws Exception, SQLException {
+	public String updateSucursal(Sucursal sucursal, int id) throws Exception, SQLException {
 		String response = "";
 
 		try {
@@ -157,7 +159,7 @@ public class SucursalDaoServiceImplement implements SucursalDaoService {
 			ps.setString(4, sucursal.getDireccion());
 			ps.setString(5, sucursal.getCiudad());
 			ps.setString(6, sucursal.getEstado());
-
+			ps.setInt(7, sucursal.getPlazaId());
 			if (ps.executeUpdate() == 1) {
 				System.out.println("Sucursal actualizada");
 				response = "OK";

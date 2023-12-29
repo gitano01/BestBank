@@ -11,7 +11,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bcn.model.Clientes;
+import com.bcn.model.Cliente;
 import com.bcn.utils.DbConnect;
 
 @Service
@@ -27,7 +27,7 @@ public class ClienteDaoServiceImplement implements ClienteDaoService {
 	@Override
 	public List<List<?>> getDatos() throws Exception {
 		List<List<?>> datos = new ArrayList<List<?>>();
-		List<Clientes> clientes = getClientes();
+		List<Cliente> clientes = getClientes();
 		try {
 			datos.add(clientes);
 		} catch (Exception e) {
@@ -37,16 +37,16 @@ public class ClienteDaoServiceImplement implements ClienteDaoService {
 	}
 
 	@Override
-	public List<Clientes> getClientes() throws Exception, SQLException {
-		List<Clientes> listaClientes = new ArrayList<Clientes>();
-		Clientes cliente = null;
+	public List<Cliente> getClientes() throws Exception, SQLException {
+		List<Cliente> listaClientes = new ArrayList<Cliente>();
+		Cliente cliente = null;
 		try {
 			conn = con.getConnection();
 			ps = conn.prepareStatement("select * from clientes");
 
 			if ((rs = ps.executeQuery()).next()) {
 				do {
-					cliente = new Clientes();
+					cliente = new Cliente();
 					cliente.setClienteId(rs.getInt("cliente_id"));
 					cliente.setNombre(rs.getString("nombre"));
 					cliente.setApellidoPaterno(rs.getString("apellido_paterno"));
@@ -79,8 +79,8 @@ public class ClienteDaoServiceImplement implements ClienteDaoService {
 	}
 
 	@Override
-	public Clientes getCliente(int id) throws Exception, SQLException {
-		Clientes cliente = null;
+	public Cliente getCliente(int id) throws Exception, SQLException {
+		Cliente cliente = null;
 
 		try {
 			conn = con.getConnection();
@@ -88,7 +88,7 @@ public class ClienteDaoServiceImplement implements ClienteDaoService {
 			ps.setInt(1, id);
 
 			if ((rs = ps.executeQuery()).next()) {
-				cliente = new Clientes();
+				cliente = new Cliente();
 
 				cliente.setClienteId(rs.getInt("cliente_id"));
 				cliente.setNombre(rs.getString("nombre"));
@@ -120,7 +120,7 @@ public class ClienteDaoServiceImplement implements ClienteDaoService {
 	}
 
 	@Override
-	public String crearCliente(Clientes cliente) throws Exception, SQLException {
+	public String crearCliente(Cliente cliente) throws Exception, SQLException {
 		String response = "";
 		try {
 			conn = con.getConnection();
@@ -164,7 +164,7 @@ public class ClienteDaoServiceImplement implements ClienteDaoService {
 	}
 
 	@Override
-	public String updateCliente(Clientes cliente, int id) throws Exception, SQLException {
+	public String updateCliente(Cliente cliente, int id) throws Exception, SQLException {
 		String response = "";
 		try {
 			conn = con.getConnection();
@@ -202,7 +202,7 @@ public class ClienteDaoServiceImplement implements ClienteDaoService {
 		return response;
 	}
 
-	public String dropCliente(Clientes cliente, int id) throws Exception, SQLException {
+	public String dropCliente(Cliente cliente, int id) throws Exception, SQLException {
 		String response = "";
 		try {
 			conn = con.getConnection();

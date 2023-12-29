@@ -11,7 +11,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bcn.model.Cuentas;
+import com.bcn.model.Cuenta;
 import com.bcn.model.TarjetasClientes;
 import com.bcn.utils.DbConnect;
 
@@ -25,9 +25,9 @@ public class CuentaDaoServiceImplement implements CuentaDaoService {
 	ResultSet rs = null;
 
 	@Override
-	public List<Cuentas> getCuentas() throws Exception, SQLException {
-		List<Cuentas> listaCuentas = new ArrayList<>();
-		Cuentas cuenta = null;
+	public List<Cuenta> getCuentas() throws Exception, SQLException {
+		List<Cuenta> listaCuentas = new ArrayList<>();
+		Cuenta cuenta = null;
 		try {
 			conn = con.getConnection();
 			ps = conn.prepareStatement("select * from cuentas;");
@@ -35,7 +35,7 @@ public class CuentaDaoServiceImplement implements CuentaDaoService {
 			if ((rs = ps.executeQuery()).next()) {
 				do {
 
-					cuenta = new Cuentas();
+					cuenta = new Cuenta();
 					cuenta.setCuentaId(rs.getInt("cuenta_id"));
 					cuenta.setFechaApertura(rs.getTimestamp("fecha_apertura"));
 					cuenta.setFechaCierre(rs.getTimestamp("fecha_cierre"));
@@ -55,7 +55,7 @@ public class CuentaDaoServiceImplement implements CuentaDaoService {
 				System.out.println("No existen registros");
 				listaCuentas = null;
 			}
-			cuenta = new Cuentas();
+			cuenta = new Cuenta();
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
 		} finally {
@@ -67,7 +67,7 @@ public class CuentaDaoServiceImplement implements CuentaDaoService {
 	@Override
 	public List<List<?>> getDatos() throws Exception, SQLException {
 		List<List<?>> datos = new ArrayList<List<?>>();
-		List<Cuentas> listaCuentas = getCuentas();
+		List<Cuenta> listaCuentas = getCuentas();
 
 		try {
 			datos.add(listaCuentas);
@@ -78,14 +78,14 @@ public class CuentaDaoServiceImplement implements CuentaDaoService {
 	}
 
 	@Override
-	public Cuentas getCuenta(int id) throws Exception, SQLException {
-		Cuentas cuenta = null;
+	public Cuenta getCuenta(int id) throws Exception, SQLException {
+		Cuenta cuenta = null;
 		try {
 			conn = con.getConnection();
 			ps = conn.prepareStatement("select * from cuentas where cuenta_id = " + id + ";");
 
 			if ((rs = ps.executeQuery()).next()) {
-				cuenta = new Cuentas();
+				cuenta = new Cuenta();
 				cuenta.setCuentaId(rs.getInt("cuenta_id"));
 				cuenta.setFechaApertura(rs.getTimestamp("fecha_apertura"));
 				cuenta.setFechaCierre(rs.getTimestamp("fecha_cierre"));
@@ -112,7 +112,7 @@ public class CuentaDaoServiceImplement implements CuentaDaoService {
 	}
 
 	@Override
-	public String crearCuenta(Cuentas cuenta) throws Exception, SQLException {
+	public String crearCuenta(Cuenta cuenta) throws Exception, SQLException {
 		String response = "";
 		Long datetime = System.currentTimeMillis();
 		Timestamp tp = new Timestamp(datetime);
@@ -163,7 +163,7 @@ public class CuentaDaoServiceImplement implements CuentaDaoService {
 	}
 
 	@Override
-	public String updateCuenta(Cuentas cuenta, int id) throws Exception, SQLException {
+	public String updateCuenta(Cuenta cuenta, int id) throws Exception, SQLException {
 		String response = "";
 
 		try {
@@ -242,8 +242,8 @@ public class CuentaDaoServiceImplement implements CuentaDaoService {
 	}
 
 	// Common Methods
-	public Cuentas getCuentaCliente(DbConnect con, TarjetasClientes tarjeta_cliente) throws Exception, SQLException {
-		Cuentas cuenta = null;
+	public Cuenta getCuentaCliente(DbConnect con, TarjetasClientes tarjeta_cliente) throws Exception, SQLException {
+		Cuenta cuenta = null;
 		try {
 			conn = con.getConnection();
 			ps = conn.prepareStatement(
@@ -252,7 +252,7 @@ public class CuentaDaoServiceImplement implements CuentaDaoService {
 							+ ";");
 
 			if ((rs = ps.executeQuery()).next()) {
-				cuenta = new Cuentas();
+				cuenta = new Cuenta();
 				cuenta.setCuentaId(rs.getInt("cuenta_id"));
 				cuenta.setSaldoInicial(rs.getDouble("saldo_inicial"));
 				cuenta.setSaldoMaximo(rs.getDouble("saldo_maximo"));
