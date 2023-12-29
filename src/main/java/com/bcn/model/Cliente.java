@@ -2,46 +2,39 @@ package com.bcn.model;
 
 import java.sql.Timestamp;
 
-public class Empleados {
-	private int empleadoId;
-	private String nombre;
+public class Cliente {
+	private int clienteId;
+	private String Nombre;
 	private String apellidoPaterno;
 	private String apellidoMaterno;
-	private String telefono;
 	private String direccion;
+	private String telefono;
 	private String colonia;
+	private String codigoPostal;
 	private String ciudad;
 	private String estado;
-	private String codigoPostal;
-	private String departamento;
 	private String email;
+	private String estatus;
 	private boolean activo;
 	private Timestamp fechaAlta;
 	private Timestamp fechaBaja;
 	private int sucursalId;
+	private int empleadoId;
 
-	public int getSucursalId() {
-		return sucursalId;
+	public int getClienteId() {
+		return clienteId;
 	}
 
-	public void setSucursalId(int sucursalId) {
-		this.sucursalId = sucursalId;
-	}
-
-	public int getEmpleadoId() {
-		return empleadoId;
-	}
-
-	public void setEmpleadoId(int empleadoId) {
-		this.empleadoId = empleadoId;
+	public void setClienteId(int clienteId) {
+		this.clienteId = clienteId;
 	}
 
 	public String getNombre() {
-		return nombre;
+		return Nombre;
 	}
 
 	public void setNombre(String nombre) {
-		this.nombre = nombre;
+		Nombre = nombre;
 	}
 
 	public String getApellidoPaterno() {
@@ -60,14 +53,6 @@ public class Empleados {
 		this.apellidoMaterno = apellidoMaterno;
 	}
 
-	public String getTelefono() {
-		return telefono;
-	}
-
-	public void setTelefono(String telefono) {
-		this.telefono = telefono;
-	}
-
 	public String getDireccion() {
 		return direccion;
 	}
@@ -76,12 +61,28 @@ public class Empleados {
 		this.direccion = direccion;
 	}
 
+	public String getTelefono() {
+		return telefono;
+	}
+
+	public void setTelefono(String telefono) {
+		this.telefono = telefono;
+	}
+
 	public String getColonia() {
 		return colonia;
 	}
 
 	public void setColonia(String colonia) {
 		this.colonia = colonia;
+	}
+
+	public String getCodigoPostal() {
+		return codigoPostal;
+	}
+
+	public void setCodigoPostal(String codigoPostal) {
+		this.codigoPostal = codigoPostal;
 	}
 
 	public String getCiudad() {
@@ -100,28 +101,20 @@ public class Empleados {
 		this.estado = estado;
 	}
 
-	public String getCodigoPostal() {
-		return codigoPostal;
-	}
-
-	public void setCodigoPostal(String codigoPostal) {
-		this.codigoPostal = codigoPostal;
-	}
-
-	public String getDepartamento() {
-		return departamento;
-	}
-
-	public void setDepartamento(String departamento) {
-		this.departamento = departamento;
-	}
-
 	public String getEmail() {
 		return email;
 	}
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getEstatus() {
+		return estatus;
+	}
+
+	public void setEstatus(String estatus) {
+		this.estatus = estatus;
 	}
 
 	public boolean isActivo() {
@@ -147,4 +140,21 @@ public class Empleados {
 	public void setFechaBaja(Timestamp fechaBaja) {
 		this.fechaBaja = fechaBaja;
 	}
+
+	public int getSucursalId() {
+		return sucursalId;
+	}
+
+	public void setSucursalId(int sucursalId) {
+		this.sucursalId = sucursalId;
+	}
+
+	public int getEmpleadoId() {
+		return empleadoId;
+	}
+
+	public void setEmpleadoId(int empleadoId) {
+		this.empleadoId = empleadoId;
+	}
+
 }

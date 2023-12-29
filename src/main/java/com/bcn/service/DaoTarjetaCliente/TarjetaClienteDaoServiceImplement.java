@@ -12,7 +12,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bcn.model.Cuentas;
+import com.bcn.model.Cuenta;
 import com.bcn.model.InventarioTarjetas;
 import com.bcn.model.TarjetasClientes;
 import com.bcn.service.DaoCuenta.CuentaDaoServiceImplement;
@@ -140,7 +140,7 @@ public class TarjetaClienteDaoServiceImplement implements TarjetaClienteDaoServi
 	@Override
 	public String assignTarjeta(TarjetasClientes tarjeta) throws Exception, SQLException {
 		String response = "";
-		Cuentas cuenta_cliente = null;
+		Cuenta cuenta_cliente = null;
 		cuentasService = new CuentaDaoServiceImplement();
 		InventarioTarjetas tarjeta_inventario = null;
 		Long datetime = System.currentTimeMillis();
@@ -384,7 +384,7 @@ public class TarjetaClienteDaoServiceImplement implements TarjetaClienteDaoServi
 	public String migrateTarjeta(TarjetasClientes tarjeta) throws Exception, SQLException {
 		String response = "";
 		TarjetasClientes tarjeta_cliente = null;
-		Cuentas cuenta_cliente = null;
+		Cuenta cuenta_cliente = null;
 		cuentasService = new CuentaDaoServiceImplement();
 		InventarioTarjetas tarjeta_inventario = null;
 		int tarjeta_cliente_id = getTarjetaClienteIdByStatus(tarjeta.getNumeroTarjeta());
