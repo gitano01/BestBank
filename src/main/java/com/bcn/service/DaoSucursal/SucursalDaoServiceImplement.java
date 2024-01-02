@@ -224,4 +224,28 @@ public class SucursalDaoServiceImplement implements SucursalDaoService {
 		}
 		return response;
 	}
+
+	public String getCodigoPlaza(DbConnect con, int cliente_id) throws Exception, SQLException {
+		String codigo_plaza = "";
+		try {
+			conn = con.getConnection();
+			ps = conn.prepareStatement(
+					"select cp.codigo_plaza from sucursales s " + "join clientes c on c.sucursal_id = s.sucursal_id "
+							+ "join catalogo_plazas cp on cp.plaza_id = s.plaza_id " + "where c.cliente_id = ?;");
+			ps.setInt(1, cliente_id);
+
+			if ((rs = ps.executeQuery()).next()) {
+				codigo_plaza = String.valueOf(rs.getInt("codigo_plaza"));
+			} else {
+				System.out.println("No se encontraron registros");
+				codigo_plaza = "";
+			}
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		} finally {
+			con.closeConnection(conn, ps, rs);
+		}
+		return codigo_plaza;
+	}
+
 }

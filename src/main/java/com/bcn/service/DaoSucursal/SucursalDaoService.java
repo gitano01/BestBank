@@ -19,5 +19,4 @@ public interface SucursalDaoService {
 	public String dropSucursal(int id) throws Exception, SQLException;
 
 	public String deleteSucursal(int id) throws Exception, SQLException;
-
 }

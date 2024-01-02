@@ -11,5 +11,4 @@ public interface EntidadFinancieraDaoService {
 	public EntidadFinanciera getEntidadFinanciera(int id) throws Exception, SQLException;
 
 	public EntidadFinanciera getEntidadFinancieraByAbm(String numero_abm) throws Exception, SQLException;
-
 }
