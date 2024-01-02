@@ -8,6 +8,9 @@ public class Cuenta {
 	private Timestamp fechaCierre;
 	private String numeroCuenta;
 	private String clabe;
+	private boolean activo;
+	private String estatusCuenta;
+	private String tipoCuenta;
 	private double saldoInicial;
 	private double saldoMaximo;
 	private double balance;
@@ -38,10 +41,6 @@ public class Cuenta {
 	public void setSaldoAnterior(double saldoAnterior) {
 		this.saldoAnterior = saldoAnterior;
 	}
-
-	private boolean activo;
-	private String estatusCuenta;
-	private String tipoCuenta;
 
 	public String getTipoCuenta() {
 		return tipoCuenta;

@@ -106,4 +106,28 @@ public class EntidadFinancieraDaoServiceImplement implements EntidadFinancieraDa
 		return entidadFinanciera;
 	}
 
+	public String getNumeroAbmByNombreInstitucion(DbConnect con, String nombre_institucion)
+			throws Exception, SQLException {
+		String numero_abm = "";
+		try {
+			conn = con.getConnection();
+			ps = conn.prepareStatement(
+					"select ef.numero_abm  from entidades_financieras ef where lower(ef.nombre_abreviado) like lower(?);");
+			ps.setString(1, nombre_institucion);
+
+			if ((rs = ps.executeQuery()).next()) {
+				numero_abm = rs.getString("numero_abm");
+			} else {
+				System.out.println("No se encontraron registros");
+				numero_abm = "";
+			}
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		} finally {
+			con.closeConnection(conn, ps, rs);
+		}
+
+		return numero_abm;
+	}
+
 }
