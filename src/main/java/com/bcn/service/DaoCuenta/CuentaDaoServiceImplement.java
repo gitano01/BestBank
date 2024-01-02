@@ -13,12 +13,18 @@ import org.springframework.stereotype.Service;
 
 import com.bcn.model.Cuenta;
 import com.bcn.model.TarjetasClientes;
+import com.bcn.service.DaoEntidadFinanciera.EntidadFinancieraDaoServiceImplement;
+import com.bcn.service.DaoSucursal.SucursalDaoServiceImplement;
 import com.bcn.utils.DbConnect;
+import com.bcn.utils.UtilsGeneric;
 
 @Service
 public class CuentaDaoServiceImplement implements CuentaDaoService {
 	@Autowired
 	private DbConnect con;
+	private UtilsGeneric utils;
+	private EntidadFinancieraDaoServiceImplement entidadService;
+	private SucursalDaoServiceImplement sucursalService;
 
 	Connection conn = null;
 	PreparedStatement ps = null;
@@ -114,37 +120,38 @@ public class CuentaDaoServiceImplement implements CuentaDaoService {
 	@Override
 	public String crearCuenta(Cuenta cuenta) throws Exception, SQLException {
 		String response = "";
+		String numero_cuenta;
+		entidadService = new EntidadFinancieraDaoServiceImplement();
+		sucursalService = new SucursalDaoServiceImplement();
+		String numero_abm = entidadService.getNumeroAbmByNombreInstitucion(con, "Best Bank");
+		String codigo_plaza = sucursalService.getCodigoPlaza(con, cuenta.getClienteId());
 		Long datetime = System.currentTimeMillis();
 		Timestamp tp = new Timestamp(datetime);
-//		int min = 1;
-//		int max = 10;
-//		double numCta1 =  100000 + Math.random() * 900000;
-//		double numCta2 = 10000 + Math.random() * 90000;
-//		Random random = new Random();
-//		int numCtaA = (int)(numCta1);
-//		int numCtaB = (int)(numCta2);
-//		int verifyDigit = random.nextInt(max + min) + min;
 		try {
-
-//			String numCta = String.valueOf(numCtaA) + String.valueOf(numCtaB);
-//			String clabe = "014180" + numCta + verifyDigit;
-//			System.out.println(numCta);
-//			System.out.println(clabe);
+			utils = new UtilsGeneric();
+			numero_cuenta = utils.generateCuenta();
+			if (getCuenta(con, numero_cuenta)) {
+				numero_cuenta = utils.generateCuenta();
+			}
+			String clabe = numero_abm + codigo_plaza + numero_cuenta;
 			conn = con.getConnection();
 			String sql = "insert into cuentas(fecha_apertura, numero_cuenta, clabe, saldo_anterior, saldo_inicial, saldo_maximo, balance, tipo_cuenta, estatus_cuenta, activo, cliente_id)"
 					+ "values(?,?,?,?,?,?,?,?,?,?,?);";
 
 			ps = conn.prepareStatement(sql);
 			ps.setTimestamp(1, tp);
-			ps.setString(2, cuenta.getNumeroCuenta());
-			ps.setString(3, cuenta.getClabe());
+			ps.setString(2, numero_cuenta);
+			ps.setString(3, clabe);
 			ps.setDouble(4, 0.0);
 			ps.setDouble(5, cuenta.getSaldoInicial());
 			ps.setDouble(6, cuenta.getSaldoMaximo());
-			ps.setDouble(7, cuenta.getBalance());
+			ps.setDouble(7, cuenta.getSaldoInicial());
 			ps.setString(8, cuenta.getTipoCuenta());
-			ps.setString(9, cuenta.getEstatusCuenta());
 			ps.setBoolean(10, cuenta.isActivo());
+			if (cuenta.isActivo())
+				ps.setString(9, "activa");
+			else
+				ps.setString(9, "inactiva");
 			ps.setInt(11, cuenta.getClienteId());
 
 			if (ps.executeUpdate() == 1) {
@@ -172,7 +179,10 @@ public class CuentaDaoServiceImplement implements CuentaDaoService {
 					+ ";";
 			ps = conn.prepareStatement(sql);
 			ps.setBoolean(1, cuenta.isActivo());
-			ps.setString(2, cuenta.getEstatusCuenta());
+			if (cuenta.isActivo())
+				ps.setString(2, "activa");
+			else
+				ps.setString(2, "inactiva");
 			ps.setDouble(3, cuenta.getSaldoMaximo());
 
 			if (ps.executeUpdate() == 1) {
@@ -269,5 +279,24 @@ public class CuentaDaoServiceImplement implements CuentaDaoService {
 			con.closeConnection(conn, ps, rs);
 		}
 		return cuenta;
+	}
+
+	public boolean getCuenta(DbConnect con, String numero_cuenta) throws Exception, SQLException {
+		try {
+			conn = con.getConnection();
+			ps = conn.prepareStatement("select * from cuentas where numero_cuenta = ?");
+			ps.setString(1, numero_cuenta);
+
+			if ((rs = ps.executeQuery()).next()) {
+				System.out.println("CUENTA ENCONTRADA");
+				return true;
+			} else
+				System.out.println("CUENTA NO EXISTE");
+			return false;
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		} finally {
+			con.closeConnection(conn, ps, rs);
+		}
 	}
 }
