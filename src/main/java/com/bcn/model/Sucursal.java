@@ -2,7 +2,7 @@ package com.bcn.model;
 
 import java.sql.Timestamp;
 
-public class Sucursales {
+public class Sucursal {
 	private int sucursalId;
 	private String nombreSucursal;
 	private String numeroSucursal;
@@ -12,6 +12,15 @@ public class Sucursales {
 	private String estado;
 	private Timestamp fechaApertura;
 	private Timestamp fechaCierre;
+	private int PlazaId;
+
+	public int getPlazaId() {
+		return PlazaId;
+	}
+
+	public void setPlazaId(int PlazaId) {
+		this.PlazaId = PlazaId;
+	}
 
 	public int getSucursalId() {
 		return sucursalId;

@@ -1,4 +1,4 @@
-package com.bcn.service;
+package com.bcn.service.DaoSucursal;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,11 +11,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bcn.model.Sucursales;
+import com.bcn.model.Sucursal;
 import com.bcn.utils.DbConnect;
 
 @Service
-public class SucursalesDaoServiceImplement implements SucursalesDaoService {
+public class SucursalDaoServiceImplement implements SucursalDaoService {
 	@Autowired
 	private DbConnect con;
 	Connection conn = null;
@@ -25,7 +25,7 @@ public class SucursalesDaoServiceImplement implements SucursalesDaoService {
 	@Override
 	public List<List<?>> getDatos() throws Exception, SQLException {
 		List<List<?>> datos = new ArrayList<List<?>>();
-		List<Sucursales> sucursales = getSucursales();
+		List<Sucursal> sucursales = getSucursales();
 		try {
 			datos.add(sucursales);
 		} catch (Exception e) {
@@ -36,16 +36,16 @@ public class SucursalesDaoServiceImplement implements SucursalesDaoService {
 	}
 
 	@Override
-	public List<Sucursales> getSucursales() throws Exception, SQLException {
-		List<Sucursales> listaSucursales = new ArrayList<Sucursales>();
-		Sucursales sucursal = null;
+	public List<Sucursal> getSucursales() throws Exception, SQLException {
+		List<Sucursal> listaSucursales = new ArrayList<Sucursal>();
+		Sucursal sucursal = null;
 		try {
 			conn = con.getConnection();
-			ps = conn.prepareStatement("select * from sucursal;");
+			ps = conn.prepareStatement("select * from sucursales;");
 
 			if ((rs = ps.executeQuery()).next()) {
 				do {
-					sucursal = new Sucursales();
+					sucursal = new Sucursal();
 
 					sucursal.setSucursalId(rs.getInt("sucursal_id"));
 					sucursal.setNombreSucursal(rs.getString("nombre"));
@@ -56,7 +56,7 @@ public class SucursalesDaoServiceImplement implements SucursalesDaoService {
 					sucursal.setEstado(rs.getString("estado"));
 					sucursal.setFechaApertura(rs.getTimestamp("fecha_apertura"));
 					sucursal.setFechaCierre(rs.getTimestamp("fecha_cierre"));
-
+					sucursal.setPlazaId(rs.getInt("plaza_id"));
 					listaSucursales.add(sucursal);
 				} while (rs.next());
 			} else {
@@ -73,15 +73,15 @@ public class SucursalesDaoServiceImplement implements SucursalesDaoService {
 	}
 
 	@Override
-	public Sucursales getSucursal(int id) throws Exception, SQLException {
-		Sucursales sucursal = null;
+	public Sucursal getSucursal(int id) throws Exception, SQLException {
+		Sucursal sucursal = null;
 		try {
 			conn = con.getConnection();
-			ps = conn.prepareStatement("select * from sucursal where sucursal_id = ?;");
+			ps = conn.prepareStatement("select * from sucursales where sucursal_id = ?;");
 			ps.setInt(1, id);
 
 			if ((rs = ps.executeQuery()).next()) {
-				sucursal = new Sucursales();
+				sucursal = new Sucursal();
 
 				sucursal.setSucursalId(rs.getInt("sucursal_id"));
 				sucursal.setNombreSucursal(rs.getString("nombre"));
@@ -92,6 +92,7 @@ public class SucursalesDaoServiceImplement implements SucursalesDaoService {
 				sucursal.setEstado(rs.getString("estado"));
 				sucursal.setFechaApertura(rs.getTimestamp("fecha_apertura"));
 				sucursal.setFechaCierre(rs.getTimestamp("fecha_cierre"));
+				sucursal.setPlazaId(rs.getInt("plaza_id"));
 
 			} else {
 				System.out.println("No existen registros");
@@ -106,14 +107,14 @@ public class SucursalesDaoServiceImplement implements SucursalesDaoService {
 	}
 
 	@Override
-	public String crearSucursal(Sucursales sucursal) throws Exception, SQLException {
+	public String crearSucursal(Sucursal sucursal) throws Exception, SQLException {
 		String response = "";
 
 		try {
 			conn = con.getConnection();
 			Long datetime = System.currentTimeMillis();
 			Timestamp tp = new Timestamp(datetime);
-			String sql = "insert into sucursal (nombre, numero_sucursal, direccion, telefono, ciudad, estado, fecha_apertura)"
+			String sql = "insert into sucursales (nombre, numero_sucursal, direccion, telefono, ciudad, estado, fecha_apertura)"
 					+ "values(?,?,?,?,?,?,?)";
 			ps = conn.prepareStatement(sql);
 
@@ -123,6 +124,7 @@ public class SucursalesDaoServiceImplement implements SucursalesDaoService {
 			ps.setString(4, sucursal.getTelefono());
 			ps.setString(5, sucursal.getCiudad());
 			ps.setString(6, sucursal.getEstado());
+			ps.setInt(7, sucursal.getPlazaId());
 			ps.setTimestamp(7, tp);
 
 			if (ps.executeUpdate() == 1) {
@@ -142,12 +144,12 @@ public class SucursalesDaoServiceImplement implements SucursalesDaoService {
 	}
 
 	@Override
-	public String updateSucursal(Sucursales sucursal, int id) throws Exception, SQLException {
+	public String updateSucursal(Sucursal sucursal, int id) throws Exception, SQLException {
 		String response = "";
 
 		try {
 			conn = con.getConnection();
-			String sql = "update sucursal set nombre= ?, numero_sucursal = ?, telefono = ?, direccion = ?, ciudad = ?, estado = ? where sucursal_id = "
+			String sql = "update sucursales set nombre= ?, numero_sucursal = ?, telefono = ?, direccion = ?, ciudad = ?, estado = ? where sucursal_id = "
 					+ id + ";";
 			ps = conn.prepareStatement(sql);
 
@@ -157,7 +159,7 @@ public class SucursalesDaoServiceImplement implements SucursalesDaoService {
 			ps.setString(4, sucursal.getDireccion());
 			ps.setString(5, sucursal.getCiudad());
 			ps.setString(6, sucursal.getEstado());
-
+			ps.setInt(7, sucursal.getPlazaId());
 			if (ps.executeUpdate() == 1) {
 				System.out.println("Sucursal actualizada");
 				response = "OK";
@@ -180,7 +182,7 @@ public class SucursalesDaoServiceImplement implements SucursalesDaoService {
 			long datetime = System.currentTimeMillis();
 			Timestamp tp = new Timestamp(datetime);
 			conn = con.getConnection();
-			String sql = "update sucursal set fecha_cierre = ? where sucursal_id = " + id + ";";
+			String sql = "update sucursales set fecha_cierre = ? where sucursal_id = " + id + ";";
 			ps = conn.prepareStatement(sql);
 
 			ps.setTimestamp(1, tp);
@@ -205,7 +207,7 @@ public class SucursalesDaoServiceImplement implements SucursalesDaoService {
 		String response = "";
 		try {
 			conn = con.getConnection();
-			String sql = "delete from sucursal where sucursal_id = " + id + ";";
+			String sql = "delete from sucursales where sucursal_id = " + id + ";";
 			ps = conn.prepareStatement(sql);
 
 			if (ps.executeUpdate() == 1) {
@@ -222,4 +224,28 @@ public class SucursalesDaoServiceImplement implements SucursalesDaoService {
 		}
 		return response;
 	}
+
+	public String getCodigoPlaza(DbConnect con, int cliente_id) throws Exception, SQLException {
+		String codigo_plaza = "";
+		try {
+			conn = con.getConnection();
+			ps = conn.prepareStatement(
+					"select cp.codigo_plaza from sucursales s " + "join clientes c on c.sucursal_id = s.sucursal_id "
+							+ "join catalogo_plazas cp on cp.plaza_id = s.plaza_id " + "where c.cliente_id = ?;");
+			ps.setInt(1, cliente_id);
+
+			if ((rs = ps.executeQuery()).next()) {
+				codigo_plaza = String.valueOf(rs.getInt("codigo_plaza"));
+			} else {
+				System.out.println("No se encontraron registros");
+				codigo_plaza = "";
+			}
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		} finally {
+			con.closeConnection(conn, ps, rs);
+		}
+		return codigo_plaza;
+	}
+
 }

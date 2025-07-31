@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bcn.model.Sucursales;
-import com.bcn.service.SucursalesDaoServiceImplement;
+import com.bcn.model.Sucursal;
+import com.bcn.service.DaoSucursal.SucursalDaoServiceImplement;
 
 @RestController
 @RequestMapping(value = "/sucursales")
 public class SucursalesController {
 	@Autowired
-	SucursalesDaoServiceImplement sucursalesService;
+	SucursalDaoServiceImplement sucursalesService;
 
 	@GetMapping(value = "/getDatos")
 	public ResponseEntity<?> getDatos() throws Exception {
@@ -42,7 +42,7 @@ public class SucursalesController {
 
 	@GetMapping(value = "/getSucursales")
 	public ResponseEntity<?> getSucursales() throws Exception {
-		List<Sucursales> sucursales = new ArrayList<Sucursales>();
+		List<Sucursal> sucursales = new ArrayList<Sucursal>();
 		try {
 			sucursales = sucursalesService.getSucursales();
 		} catch (Exception e) {
@@ -59,7 +59,7 @@ public class SucursalesController {
 	@GetMapping(value = "getSucursal/{sucursalId}")
 	public ResponseEntity<?> getSucursal(@PathVariable String sucursalId) throws Exception {
 		int id = Integer.parseInt(sucursalId);
-		Sucursales sucursal = null;
+		Sucursal sucursal = null;
 		try {
 			sucursal = sucursalesService.getSucursal(id);
 		} catch (Exception e) {
@@ -69,12 +69,12 @@ public class SucursalesController {
 		if (sucursal == null) {
 			return new ResponseEntity<String>("No hay registros", HttpStatus.NOT_FOUND);
 		} else {
-			return new ResponseEntity<Sucursales>(sucursal, HttpStatus.OK);
+			return new ResponseEntity<Sucursal>(sucursal, HttpStatus.OK);
 		}
 	}
 
 	@PostMapping(value = "/addSucursal")
-	public ResponseEntity<?> addSucursal(@RequestBody Sucursales sucursal) throws Exception {
+	public ResponseEntity<?> addSucursal(@RequestBody Sucursal sucursal) throws Exception {
 		String response = "";
 		try {
 			response = sucursalesService.crearSucursal(sucursal);
@@ -90,7 +90,7 @@ public class SucursalesController {
 	}
 
 	@PutMapping(value = "/updateSucursal/{sucursalId}")
-	public ResponseEntity<?> updateSucursal(@RequestBody Sucursales sucursal, @PathVariable String sucursalId)
+	public ResponseEntity<?> updateSucursal(@RequestBody Sucursal sucursal, @PathVariable String sucursalId)
 			throws Exception {
 		String response = "";
 		int id = Integer.parseInt(sucursalId);

@@ -2,12 +2,15 @@ package com.bcn.model;
 
 import java.sql.Timestamp;
 
-public class Cuentas {
+public class Cuenta {
 	private int cuentaId;
 	private Timestamp fechaApertura;
 	private Timestamp fechaCierre;
 	private String numeroCuenta;
 	private String clabe;
+	private boolean activo;
+	private String estatusCuenta;
+	private String tipoCuenta;
 	private double saldoInicial;
 	private double saldoMaximo;
 	private double balance;
@@ -38,10 +41,6 @@ public class Cuentas {
 	public void setSaldoAnterior(double saldoAnterior) {
 		this.saldoAnterior = saldoAnterior;
 	}
-
-	private boolean activo;
-	private String estatusCuenta;
-	private String tipoCuenta;
 
 	public String getTipoCuenta() {
 		return tipoCuenta;

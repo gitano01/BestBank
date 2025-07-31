@@ -1,4 +1,4 @@
-package com.bcn.service;
+package com.bcn.service.DaoCliente;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,11 +11,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bcn.model.Clientes;
+import com.bcn.model.Cliente;
 import com.bcn.utils.DbConnect;
 
 @Service
-public class ClientesDaoServiceImplement implements ClientesDaoService {
+public class ClienteDaoServiceImplement implements ClienteDaoService {
 
 	@Autowired
 	private DbConnect con;
@@ -27,7 +27,7 @@ public class ClientesDaoServiceImplement implements ClientesDaoService {
 	@Override
 	public List<List<?>> getDatos() throws Exception {
 		List<List<?>> datos = new ArrayList<List<?>>();
-		List<Clientes> clientes = getClientes();
+		List<Cliente> clientes = getClientes();
 		try {
 			datos.add(clientes);
 		} catch (Exception e) {
@@ -37,16 +37,16 @@ public class ClientesDaoServiceImplement implements ClientesDaoService {
 	}
 
 	@Override
-	public List<Clientes> getClientes() throws Exception, SQLException {
-		List<Clientes> listaClientes = new ArrayList<Clientes>();
-		Clientes cliente = null;
+	public List<Cliente> getClientes() throws Exception, SQLException {
+		List<Cliente> listaClientes = new ArrayList<Cliente>();
+		Cliente cliente = null;
 		try {
 			conn = con.getConnection();
-			ps = conn.prepareStatement("select * from cliente");
+			ps = conn.prepareStatement("select * from clientes");
 
 			if ((rs = ps.executeQuery()).next()) {
 				do {
-					cliente = new Clientes();
+					cliente = new Cliente();
 					cliente.setClienteId(rs.getInt("cliente_id"));
 					cliente.setNombre(rs.getString("nombre"));
 					cliente.setApellidoPaterno(rs.getString("apellido_paterno"));
@@ -79,16 +79,16 @@ public class ClientesDaoServiceImplement implements ClientesDaoService {
 	}
 
 	@Override
-	public Clientes getCliente(int id) throws Exception, SQLException {
-		Clientes cliente = null;
+	public Cliente getCliente(int id) throws Exception, SQLException {
+		Cliente cliente = null;
 
 		try {
 			conn = con.getConnection();
-			ps = conn.prepareStatement("select * from cliente where cliente_id = ?");
+			ps = conn.prepareStatement("select * from clientes where cliente_id = ?");
 			ps.setInt(1, id);
 
 			if ((rs = ps.executeQuery()).next()) {
-				cliente = new Clientes();
+				cliente = new Cliente();
 
 				cliente.setClienteId(rs.getInt("cliente_id"));
 				cliente.setNombre(rs.getString("nombre"));
@@ -120,11 +120,11 @@ public class ClientesDaoServiceImplement implements ClientesDaoService {
 	}
 
 	@Override
-	public String crearCliente(Clientes cliente) throws Exception, SQLException {
+	public String crearCliente(Cliente cliente) throws Exception, SQLException {
 		String response = "";
 		try {
 			conn = con.getConnection();
-			String sql = "insert into cliente(nombre, apellido_paterno, apellido_materno, direccion, telefono, colonia, codigo_postal, ciudad, estado, email, estatus, activo, sucursal_id, empleado_id, fecha_alta)"
+			String sql = "insert into clientes(nombre, apellido_paterno, apellido_materno, direccion, telefono, colonia, codigo_postal, ciudad, estado, email, estatus, activo, sucursal_id, empleado_id, fecha_alta)"
 					+ "values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
 			System.out.println("DATOS A INGRESAR: " + sql);
 			ps = conn.prepareStatement(sql);
@@ -164,11 +164,11 @@ public class ClientesDaoServiceImplement implements ClientesDaoService {
 	}
 
 	@Override
-	public String updateCliente(Clientes cliente, int id) throws Exception, SQLException {
+	public String updateCliente(Cliente cliente, int id) throws Exception, SQLException {
 		String response = "";
 		try {
 			conn = con.getConnection();
-			String sql = "update cliente set nombre = ?, apellido_paterno = ?, apellido_materno = ?, direccion = ?, telefono = ?, colonia = ?, codigo_postal = ?, ciudad = ?, estado = ?, email = ?, estatus = ?, activo = ?, empleado_id = ?, sucursal_id = ?"
+			String sql = "update clientes set nombre = ?, apellido_paterno = ?, apellido_materno = ?, direccion = ?, telefono = ?, colonia = ?, codigo_postal = ?, ciudad = ?, estado = ?, email = ?, estatus = ?, activo = ?, empleado_id = ?, sucursal_id = ?"
 					+ " where cliente_id = " + id + ";";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, cliente.getNombre());
@@ -202,11 +202,11 @@ public class ClientesDaoServiceImplement implements ClientesDaoService {
 		return response;
 	}
 
-	public String dropCliente(Clientes cliente, int id) throws Exception, SQLException {
+	public String dropCliente(Cliente cliente, int id) throws Exception, SQLException {
 		String response = "";
 		try {
 			conn = con.getConnection();
-			String sql = "update cliente set estatus = ?, activo = ?, fecha_baja = ?" + " where cliente_id = " + id
+			String sql = "update clientes set estatus = ?, activo = ?, fecha_baja = ?" + " where cliente_id = " + id
 					+ ";";
 			ps = conn.prepareStatement(sql);
 			Long datetime = System.currentTimeMillis();
@@ -236,7 +236,7 @@ public class ClientesDaoServiceImplement implements ClientesDaoService {
 		String response = "";
 		try {
 			conn = con.getConnection();
-			String sql = "delete from cliente where cliente_id = ?";
+			String sql = "delete from clientes where cliente_id = ?";
 			ps = conn.prepareStatement(sql);
 			ps.setInt(1, id);
 			System.out.println("TRADUCCION SQL ES: " + ps.toString());

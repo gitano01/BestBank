@@ -1,4 +1,4 @@
-package com.bcn.service;
+package com.bcn.service.DaoEmpleado;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,11 +11,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bcn.model.Empleados;
+import com.bcn.model.Empleado;
 import com.bcn.utils.DbConnect;
 
 @Service
-public class EmpleadosDaoServiceImplement implements EmpleadosDaoService {
+public class EmpleadoDaoServiceImplement implements EmpleadoDaoService {
 	@Autowired
 	private DbConnect con;
 
@@ -24,16 +24,16 @@ public class EmpleadosDaoServiceImplement implements EmpleadosDaoService {
 	ResultSet rs = null;
 
 	@Override
-	public List<Empleados> getEmpleados() throws Exception, SQLException {
-		List<Empleados> listaEmpleados = new ArrayList<Empleados>();
-		Empleados empleado = null;
+	public List<Empleado> getEmpleados() throws Exception, SQLException {
+		List<Empleado> listaEmpleados = new ArrayList<Empleado>();
+		Empleado empleado = null;
 		try {
 			conn = con.getConnection();
-			ps = conn.prepareStatement("select * from empleado");
+			ps = conn.prepareStatement("select * from empleados");
 
 			if ((rs = ps.executeQuery()).next()) {
 				do {
-					empleado = new Empleados();
+					empleado = new Empleado();
 					empleado.setEmpleadoId(rs.getInt("empleado_id"));
 					empleado.setNombre(rs.getString("nombre"));
 					empleado.setApellidoPaterno(rs.getString("apellido_paterno"));
@@ -68,7 +68,7 @@ public class EmpleadosDaoServiceImplement implements EmpleadosDaoService {
 	@Override
 	public List<List<?>> getDatos() throws Exception, SQLException {
 		List<List<?>> datos = new ArrayList<List<?>>();
-		List<Empleados> listaEmpleados = getEmpleados();
+		List<Empleado> listaEmpleados = getEmpleados();
 		try {
 			datos.add(listaEmpleados);
 		} catch (Exception e) {
@@ -79,15 +79,15 @@ public class EmpleadosDaoServiceImplement implements EmpleadosDaoService {
 	}
 
 	@Override
-	public Empleados getEmpleado(int id) throws Exception, SQLException {
-		Empleados empleado = null;
+	public Empleado getEmpleado(int id) throws Exception, SQLException {
+		Empleado empleado = null;
 		try {
 			conn = con.getConnection();
-			ps = conn.prepareStatement("select * from empleado where empleado_id = ?");
+			ps = conn.prepareStatement("select * from empleados where empleado_id = ?");
 			ps.setInt(1, id);
 
 			if ((rs = ps.executeQuery()).next()) {
-				empleado = new Empleados();
+				empleado = new Empleado();
 				empleado.setEmpleadoId(rs.getInt("empleado_id"));
 				empleado.setNombre(rs.getString("nombre"));
 				empleado.setApellidoPaterno(rs.getString("apellido_paterno"));
@@ -118,13 +118,13 @@ public class EmpleadosDaoServiceImplement implements EmpleadosDaoService {
 	}
 
 	@Override
-	public String crearEmpleado(Empleados empleado) throws Exception, SQLException {
+	public String crearEmpleado(Empleado empleado) throws Exception, SQLException {
 		String response = "";
 		Long datetime = System.currentTimeMillis();
 		Timestamp tp = new Timestamp(datetime);
 		try {
 			conn = con.getConnection();
-			String sql = "insert into empleado(nombre, apellido_paterno, apellido_materno, telefono, direccion, colonia, ciudad, estado, codigo_postal, departamento, email, activo, fecha_alta, sucursal_id)"
+			String sql = "insert into empleados(nombre, apellido_paterno, apellido_materno, telefono, direccion, colonia, ciudad, estado, codigo_postal, departamento, email, activo, fecha_alta, sucursal_id)"
 					+ "values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, empleado.getNombre());
@@ -158,11 +158,11 @@ public class EmpleadosDaoServiceImplement implements EmpleadosDaoService {
 	}
 
 	@Override
-	public String updateEmpleado(Empleados empleado, int id) throws Exception, SQLException {
+	public String updateEmpleado(Empleado empleado, int id) throws Exception, SQLException {
 		String response = "";
 		try {
 			conn = con.getConnection();
-			String sql = "update empleado set nombre = ?, apellido_paterno = ?, apellido_materno = ?, telefono = ?, direccion = ?, colonia = ?, ciudad = ?, estado = ?, codigo_postal = ?, departamento = ?, email = ?, activo = ?, sucursal_id = ? "
+			String sql = "update empleados set nombre = ?, apellido_paterno = ?, apellido_materno = ?, telefono = ?, direccion = ?, colonia = ?, ciudad = ?, estado = ?, codigo_postal = ?, departamento = ?, email = ?, activo = ?, sucursal_id = ? "
 					+ "where empleado_id = " + id + ";";
 
 			ps = conn.prepareStatement(sql);
@@ -196,11 +196,11 @@ public class EmpleadosDaoServiceImplement implements EmpleadosDaoService {
 	}
 
 	@Override
-	public String deleteEmpleado(Empleados empleado, int id) throws Exception, SQLException {
+	public String deleteEmpleado(Empleado empleado, int id) throws Exception, SQLException {
 		String response = "";
 		try {
 			conn = con.getConnection();
-			String sql = "delete from empleado where empleado_id = ?;";
+			String sql = "delete from empleados where empleado_id = ?;";
 			ps = conn.prepareStatement(sql);
 			ps.setInt(1, id);
 
@@ -221,13 +221,13 @@ public class EmpleadosDaoServiceImplement implements EmpleadosDaoService {
 	}
 
 	@Override
-	public String dropEmpleado(Empleados empleado, int id) throws Exception, SQLException {
+	public String dropEmpleado(Empleado empleado, int id) throws Exception, SQLException {
 		String response = "";
 		Long datetime = System.currentTimeMillis();
 		Timestamp tp = new Timestamp(datetime);
 		try {
 			conn = con.getConnection();
-			String sql = "update empleado set activo = ?, fecha_baja = ? where empleado_id = ?;";
+			String sql = "update empleados set activo = ?, fecha_baja = ? where empleado_id = ?;";
 
 			ps = conn.prepareStatement(sql);
 			ps.setBoolean(1, false);
