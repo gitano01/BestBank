@@ -15,20 +15,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bcn.model.Clientes;
-import com.bcn.service.ClientesDaoServiceImplement;
+import com.bcn.model.Empleados;
+import com.bcn.service.EmpleadosDaoServiceImplement;
 
 @RestController
-@RequestMapping(value = "/clientes")
-public class ClientesController {
+@RequestMapping(value = "/empleados")
+public class EmpleadosController {
 	@Autowired
-	ClientesDaoServiceImplement clientesService;
+	EmpleadosDaoServiceImplement empleadosService;
 
 	@GetMapping("/getDatos")
 	public ResponseEntity<?> getDatos() throws Exception {
 		List<List<?>> datos = new ArrayList<List<?>>();
 		try {
-			datos = clientesService.getDatos();
+			datos = empleadosService.getDatos();
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
 		}
@@ -40,47 +40,45 @@ public class ClientesController {
 		}
 	}
 
-	@GetMapping("/getClientes")
-	public ResponseEntity<?> getListaClientes() throws Exception {
-		List<Clientes> cliente = null;
+	@GetMapping("/getEmpleados")
+	public ResponseEntity<?> getListaEmpleados() throws Exception {
+		List<Empleados> empleados = null;
 		try {
-			cliente = new ArrayList<Clientes>();
-			cliente = clientesService.getClientes();
+			empleados = new ArrayList<Empleados>();
+			empleados = empleadosService.getEmpleados();
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
 		}
 
-		if (cliente == null) {
+		if (empleados == null) {
 			return new ResponseEntity<String>("No se hallaron registros", HttpStatus.NOT_FOUND);
 		} else {
-			return new ResponseEntity<List<Clientes>>(cliente, HttpStatus.OK);
+			return new ResponseEntity<List<Empleados>>(empleados, HttpStatus.OK);
 		}
 	}
 
-	@GetMapping(value = "/getCliente/{clienteId}")
-	public ResponseEntity<?> getCliente(@PathVariable String clienteId) throws Exception {
-		int id = Integer.parseInt(clienteId);
-
-		Clientes cliente = null;
+	@GetMapping("/getEmpleado/{empleadoId}")
+	public ResponseEntity<?> getEmpleado(@PathVariable String empleadoId) throws Exception {
+		int id = Integer.parseInt(empleadoId);
+		Empleados empleado = null;
 		try {
-			cliente = clientesService.getCliente(id);
-
+			empleado = empleadosService.getEmpleado(id);
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
 		}
 
-		if (cliente == null) {
+		if (empleado == null) {
 			return new ResponseEntity<String>("No se hallaron registros", HttpStatus.NOT_FOUND);
 		} else {
-			return new ResponseEntity<Clientes>(cliente, HttpStatus.OK);
+			return new ResponseEntity<Empleados>(empleado, HttpStatus.OK);
 		}
 	}
 
-	@PostMapping(value = "/addCliente")
-	public ResponseEntity<?> addCliente(@RequestBody Clientes cliente) throws Exception {
+	@PostMapping("/addEmpleado")
+	public ResponseEntity<?> addEmpleado(@RequestBody Empleados empleado) throws Exception {
 		String response = "";
 		try {
-			response = clientesService.crearCliente(cliente);
+			response = empleadosService.crearEmpleado(empleado);
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
 		}
@@ -92,13 +90,13 @@ public class ClientesController {
 		}
 	}
 
-	@PutMapping(value = "/updateCliente/{clienteId}")
-	public ResponseEntity<?> updateCliente(@RequestBody Clientes cliente, @PathVariable String clienteId)
+	@PutMapping("/updateEmpleado/{empleadoId}")
+	public ResponseEntity<?> updateEmpleado(@RequestBody Empleados empleado, @PathVariable String empleadoId)
 			throws Exception {
-		int id = Integer.parseInt(clienteId);
+		int id = Integer.parseInt(empleadoId);
 		String response = "";
 		try {
-			response = clientesService.updateCliente(cliente, id);
+			response = empleadosService.updateEmpleado(empleado, id);
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
 		}
@@ -110,13 +108,13 @@ public class ClientesController {
 		}
 	}
 
-	@PutMapping(value = "/dropCliente/{clienteId}")
-	public ResponseEntity<?> dropCliente(@RequestBody Clientes cliente, @PathVariable String clienteId)
+	@PutMapping("/dropEmpleado/{empleadoId}")
+	public ResponseEntity<?> dropEmpleado(@RequestBody Empleados empleado, @PathVariable String empleadoId)
 			throws Exception {
-		int id = Integer.parseInt(clienteId);
+		int id = Integer.parseInt(empleadoId);
 		String response = "";
 		try {
-			response = clientesService.dropCliente(cliente, id);
+			response = empleadosService.dropEmpleado(empleado, id);
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
 		}
@@ -128,12 +126,13 @@ public class ClientesController {
 		}
 	}
 
-	@DeleteMapping(value = "/deleteCliente/{clienteId}")
-	public ResponseEntity<?> deleteCliente(@PathVariable String clienteId) throws Exception {
-		int id = Integer.parseInt(clienteId);
+	@DeleteMapping("/deleteEmpleado/{empleadoId}")
+	public ResponseEntity<?> deleteEmpleado(@RequestBody Empleados empleado, @PathVariable String empleadoId)
+			throws Exception {
+		int id = Integer.parseInt(empleadoId);
 		String response = "";
 		try {
-			response = clientesService.deleteCliente(id);
+			response = empleadosService.deleteEmpleado(empleado, id);
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
 		}
@@ -144,5 +143,4 @@ public class ClientesController {
 			return new ResponseEntity<String>(response, HttpStatus.OK);
 		}
 	}
-
 }
