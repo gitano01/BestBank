@@ -56,6 +56,14 @@
 		<artifactId>json</artifactId>
 		<version>20231013</version>
 	</dependency>
+	
+	<!-- Se agrega dependencia para JWT-->
+	<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api -->
+	<dependency>
+	    <groupId>io.jsonwebtoken</groupId>
+	    <artifactId>jjwt-api</artifactId>
+	    <version>0.12.6</version>
+	</dependency>
  </dependencies>
 
 	<build>

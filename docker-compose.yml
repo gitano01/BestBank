@@ -1,0 +1,14 @@
+services:
+  app:
+    image: gabo2791/bestbankappcontainer:latest
+    container_name: BestBankAppContainer
+    ports:
+      - "8080:8080"
+    env_file:
+      - app.env
+    environment:
+      JDBC_URL_DEV: ${JDBC_URL_DEV}
+      JDBC_URL_PROD: ${JDBC_URL_PROD}
+      JDBC_USER: ${JDBC_USER}
+      JDBC_PASSWORD: ${JDBC_PASSWORD}
+      #MAXIMUMPOOLSIZE: ${MAXIMUMPOOLSIZE}

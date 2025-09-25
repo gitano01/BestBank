@@ -12,18 +12,13 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 public class BestBankApplication {
 
 	public static void main(String[] args) {
-		SpringApplication app = new SpringApplication(BestBankApplication.class); 
-		Map<String,Object> map = new HashMap<>();
-        map.put("server.port", "8080");
-		map.put("spring.mvc.throw-exception-if-no-handler-found",true);
-        //map.put("server.adress", "0.0.0.0");       
-        app.setDefaultProperties(map);
-        app.run(args);
+		SpringApplication app = new SpringApplication(BestBankApplication.class);
+		Map<String, Object> map = new HashMap<>();
+		map.put("server.port", "8080");
+		map.put("spring.mvc.throw-exception-if-no-handler-found", true);
+		map.put("server.servlet.context-path", "/BestBankApp");
+	// 	map.put("server.adress", "0.0.0.0");
+		app.setDefaultProperties(map);
+		app.run(args);
 	}
 }
-
-
-
-
-        
-        

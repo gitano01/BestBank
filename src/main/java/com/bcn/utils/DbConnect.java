@@ -6,17 +6,25 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class DbConnect {
-//	private static final String JBDC_URL = "jdbc:postgresql://localhost:5433/best_bank";// desarrollo de victor
-	private static final String JBDC_URL = "jdbc:postgresql://localhost:5432/best_bank";
-	private static final String JDBC_USER = "postgres";
-	private static final String JDBC_PASSWORD = "postgres";
+	@Value("${JDBC_URL_DEV}")
+	private String JDBC_URL;
+
+	@Value("${JDBC_URL_PROD}")
+	private String JDBC_PROD;
+
+	@Value("${JDBC_USER}")
+	private String JDBC_USER;
+
+	@Value("${JDBC_PASSWORD}")
+	private String JDBC_PASSWORD;
 
 	public java.sql.Connection getConnection() throws Exception, SQLException {
-		return DriverManager.getConnection(JBDC_URL, JDBC_USER, JDBC_PASSWORD);
+		return DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
 	}
 
 	public void close(ResultSet rs) throws Exception, SQLException {
