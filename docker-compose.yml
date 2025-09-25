@@ -1,6 +1,6 @@
 services:
   app:
-    image: gabo2791/bestbankappcontainer:latest
+    image: gabo2791/bestbankapp:1.0
     container_name: BestBankAppContainer
     ports:
       - "8080:8080"
