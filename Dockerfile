@@ -26,7 +26,7 @@ WORKDIR /app
 ARG CACHE_BREAKER=1
 
 #Activar variable para el nombre del jar
-ARG JAR_NAME=BestBankAppContainer.jar
+ARG JAR_NAME=BestBank.jar
 
 # Copiar el JAR compilado desde el builder
 COPY --from=builder /app/target/${JAR_NAME} app.jar
