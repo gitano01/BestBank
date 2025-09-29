@@ -24,9 +24,6 @@ public class DbConnect {
 	private String JDBC_PASSWORD;
 
 	public java.sql.Connection getConnection() throws Exception, SQLException {
-		System.out.println("ENV1: " + JDBC_URL);
-		System.out.println("ENV2: " + JDBC_USER);
-		System.out.println("ENV3: " + JDBC_PASSWORD);
 
 		return DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
 	}
